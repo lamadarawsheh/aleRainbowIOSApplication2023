@@ -1,0 +1,41 @@
+{
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "78424be314842833c04bc3bef5b72e85fff99204",
+        "version" : "5.6.4"
+      }
+    },
+    {
+      "identity" : "cryptoswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzyzanowskim/CryptoSwift.git",
+      "state" : {
+        "revision" : "19b3c3ceed117c5cc883517c4e658548315ba70b",
+        "version" : "1.6.0"
+      }
+    },
+    {
+      "identity" : "rainbow-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rainbow-CPaaS/Rainbow-iOS-SDK.git",
+      "state" : {
+        "revision" : "72a73d27b331e82548b6eb3ba8135ad3ccf84943",
+        "version" : "2.6.0"
+      }
+    },
+    {
+      "identity" : "rainbow-ios-webrtc",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Rainbow-CPaaS/Rainbow-iOS-WebRTC.git",
+      "state" : {
+        "revision" : "2a46a94502b580a113e9f868629b9a70ee4d4730",
+        "version" : "1.1.38197"
+      }
+    }
+  ],
+  "version" : 2
+}
