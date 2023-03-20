@@ -2,9 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="0r8-KN-8Vv">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -26,13 +24,13 @@
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CRe-WI-E81">
                                                 <rect key="frame" x="0.0" y="0.0" width="393" height="180"/>
-                                                <color key="backgroundColor" name="AccentColor"/>
+                                                <color key="backgroundColor" red="0.87450981139999995" green="0.86274516580000005" blue="0.78823530669999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="180" id="dyx-5l-A6c"/>
                                                 </constraints>
                                             </imageView>
-                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="apple.logo" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Km5-Dn-Mds">
-                                                <rect key="frame" x="121.66666666666669" y="105.33333333333333" width="150" height="148.33333333333331"/>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="Km5-Dn-Mds">
+                                                <rect key="frame" x="121.66666666666669" y="105" width="150" height="150"/>
                                                 <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="150" id="nba-5B-RO4"/>
@@ -66,7 +64,7 @@
                                                     <constraint firstAttribute="height" constant="50" id="px0-ad-qsF"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" textContentType="email"/>
+                                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="next" textContentType="email"/>
                                             </textField>
                                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="n0B-cX-SkA">
                                                 <rect key="frame" x="21.666666666666657" y="490" width="350" height="50"/>
@@ -75,21 +73,21 @@
                                                     <constraint firstAttribute="width" constant="350" id="D6F-bk-HpO"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                <textInputTraits key="textInputTraits" textContentType="password"/>
+                                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
                                                 <connections>
                                                     <action selector="passwordTextField:" destination="htE-Y7-gKa" eventType="editingDidEnd" id="DbH-gV-C1t"/>
                                                 </connections>
                                             </textField>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zLd-xN-fgh">
                                                 <rect key="frame" x="21.666666666666657" y="570" width="350" height="50"/>
-                                                <color key="backgroundColor" name="AccentColor"/>
+                                                <color key="backgroundColor" red="0.87450981139999995" green="0.86274516580000005" blue="0.78823530669999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="350" id="3iT-t3-IpO"/>
                                                     <constraint firstAttribute="height" constant="50" id="kjl-QG-mS5"/>
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" title="Login">
-                                                    <color key="baseForegroundColor" systemColor="systemGray4Color"/>
+                                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </buttonConfiguration>
                                                 <connections>
                                                     <action selector="loginButtonTapped:" destination="yPx-D8-MQf" eventType="touchUpInside" id="yYB-PY-eVF"/>
@@ -139,6 +137,7 @@
                     <connections>
                         <outlet property="emailTextField" destination="phb-vB-2Kk" id="FKX-w6-mw3"/>
                         <outlet property="loginButton" destination="zLd-xN-fgh" id="p5N-eE-o6c"/>
+                        <outlet property="logo" destination="Km5-Dn-Mds" id="J4j-it-PNF"/>
                         <outlet property="passwordTextField" destination="n0B-cX-SkA" id="57S-E9-xxX"/>
                         <outlet property="scrollView" destination="ajn-Mh-37o" id="3fK-Kn-nlz"/>
                     </connections>
@@ -148,37 +147,37 @@
             </objects>
             <point key="canvasLocation" x="1062" y="23"/>
         </scene>
-        <!--Item 2-->
+        <!--Contacts View Controller-->
         <scene sceneID="qAn-sY-cBd">
             <objects>
-                <viewController id="X4u-LV-p7g" sceneMemberID="viewController">
+                <viewController id="X4u-LV-p7g" customClass="ContactsViewController" customModule="RainbowApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="D3i-Ew-H8g">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="bPK-a1-TY3"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="T1s-iE-Cuk"/>
+                    <navigationItem key="navigationItem" id="L1v-fW-dE4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tj7-a4-8iK" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3166" y="524"/>
+            <point key="canvasLocation" x="4107.6335877862593" y="571.83098591549299"/>
         </scene>
-        <!--Item 1-->
+        <!--Conversations-->
         <scene sceneID="O04-10-tzZ">
             <objects>
-                <viewController id="Pzy-wu-dhJ" sceneMemberID="viewController">
+                <viewController title="Conversations" id="Pzy-wu-dhJ" customClass="ConversationsViewController" customModule="RainbowApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JQa-nb-WTT">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <viewLayoutGuide key="safeArea" id="kC1-JL-4q4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="UBp-Ze-Mrl"/>
+                    <navigationItem key="navigationItem" id="IBS-lN-pMO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V1K-X9-FLg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3166" y="-83"/>
+            <point key="canvasLocation" x="4092.3664122137402" y="-83.098591549295776"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="uAg-If-sYF">
@@ -200,32 +199,65 @@
         <scene sceneID="Ih2-M1-6dH">
             <objects>
                 <tabBarController storyboardIdentifier="tabbarView" id="XUb-pQ-FRo" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="aJO-Gy-pTq"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HUc-g1-h09">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
-                        <segue destination="Pzy-wu-dhJ" kind="relationship" relationship="viewControllers" id="jVR-yI-v44"/>
-                        <segue destination="X4u-LV-p7g" kind="relationship" relationship="viewControllers" id="Fsu-O5-7V9"/>
+                        <segue destination="4Ty-XC-mz6" kind="relationship" relationship="viewControllers" id="jVR-yI-v44"/>
+                        <segue destination="eCe-3t-VNa" kind="relationship" relationship="viewControllers" id="Fsu-O5-7V9"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Egz-El-eDr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2266" y="220"/>
         </scene>
+        <!--Conversations-->
+        <scene sceneID="wrr-CF-WQw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="4Ty-XC-mz6" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Conversations" image="message" catalog="system" id="UBp-Ze-Mrl"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="3QZ-qr-wvp">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Pzy-wu-dhJ" kind="relationship" relationship="rootViewController" id="l1d-w4-eRH"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0Fx-RC-xT1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3165.6488549618321" y="-83.098591549295776"/>
+        </scene>
+        <!--Contacts-->
+        <scene sceneID="I39-9N-NRP">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eCe-3t-VNa" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Contacts" image="person.2" catalog="system" id="T1s-iE-Cuk"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rU6-bv-axE">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="X4u-LV-p7g" kind="relationship" relationship="rootViewController" id="kDI-c4-yIQ"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ibP-VC-kkU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3180.9160305343512" y="571.83098591549299"/>
+        </scene>
     </scenes>
     <resources>
-        <image name="apple.logo" catalog="system" width="105" height="128"/>
-        <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <image name="logo" width="198" height="198"/>
+        <image name="message" catalog="system" width="128" height="116"/>
+        <image name="person.2" catalog="system" width="128" height="82"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray4Color">
-            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

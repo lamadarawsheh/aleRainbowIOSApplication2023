@@ -6,21 +6,28 @@
 //
 
 import Rainbow
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
     
+    @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     override func viewDidLoad() {
-        
+        self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow),
                                                name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
+        setImage()
+        emailTextField.returnKeyType = UIReturnKeyType.next
+        passwordTextField.returnKeyType = UIReturnKeyType.done
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
@@ -28,9 +35,30 @@ class ViewController: UIViewController {
     {
         view.endEditing(true)
     }
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        switchBasedNextTextField(textField)
+        return true
+    }
+    func switchBasedNextTextField(_ textField: UITextField){
+        switch textField {
+        case self.emailTextField:
+            self.passwordTextField.becomeFirstResponder()
+        case self.passwordTextField:
+            view.endEditing(true)
+            
+        default:
+            self.emailTextField.resignFirstResponder()
+        }
+    }
+    
+    
+    
+    
+    
     @objc func keyboardDidShow(notification: Notification) {
         let activeField = view
-        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: view.frame.origin.y + 200 , right: 0.0)
+        let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: view.frame.origin.y + 90 , right: 0.0)
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
         let activeRect = activeField!.convert(activeField!.bounds, to: scrollView)
@@ -54,31 +82,38 @@ class ViewController: UIViewController {
         
     }
     @IBAction func loginButtonTapped(_ sender: Any) {
-        
         ServicesManager.sharedInstance()?.loginManager.setUsername(emailTextField.text, andPassword: passwordTextField.text)
         ServicesManager.sharedInstance()?.loginManager.connect()
+    }
+    
+    @objc func didLogin(notification: NSNotification) {
+        DispatchQueue.main.async {
+            let loginViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        }
+        
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
+    }
+    override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
         
     }
     
-    @objc func didLogin(notification: NSNotification) {
-        DispatchQueue.main.async {
-            let vc  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
-            vc.modalPresentationStyle = .fullScreen
-            self.navigationController?.present(vc, animated: false)
-        }
-        
-    }
-    
-    
-    @objc func failedToLogin() {
-        
+    @objc func failedToLogin(notification: NSNotification) {
         DispatchQueue.main.async { [self] in
-            showBasicAlert(on: self, with: "Warning", message: "your email or password may be wrong check again!")
-            
-            
+            showBasicAlert(on: self, with: "Error", message: "your email or password may be wrong check again!")
         }
+    }
+    func setImage(){
+        self.logo.layer.borderWidth = 0.5
+        self.logo.layer.masksToBounds = false
+        logo.layer.cornerRadius = logo.frame.size.width/2
+        self.logo.clipsToBounds = true
     }
     
     
