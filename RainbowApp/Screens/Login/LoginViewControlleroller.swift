@@ -6,7 +6,8 @@
 //
 
 import Rainbow
-class ViewController: UIViewController, UITextFieldDelegate {
+import MBProgressHUD
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -15,21 +16,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     override func viewDidLoad() {
-        self.navigationController?.navigationBar.isHidden = true
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow),
                                                name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
+        DispatchQueue.main.async{ [self] in
+            let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
+            loadingNotification.mode = MBProgressHUDMode.indeterminate
+            loadingNotification.label.text = "Loading"
+            NotificationCenter.default.addObserver(self, selector: #selector(didReconnect(notification:)), name: NSNotification.Name(kLoginManagerDidReconnect), object: nil)
+        }
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
         setImage()
         emailTextField.returnKeyType = UIReturnKeyType.next
         passwordTextField.returnKeyType = UIReturnKeyType.done
         emailTextField.delegate = self
         passwordTextField.delegate = self
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
     }
     @objc func dismissKeyboard()
     {
@@ -51,9 +57,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             self.emailTextField.resignFirstResponder()
         }
     }
-    
-    
-    
     
     
     @objc func keyboardDidShow(notification: Notification) {
@@ -84,28 +87,23 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginButtonTapped(_ sender: Any) {
         ServicesManager.sharedInstance()?.loginManager.setUsername(emailTextField.text, andPassword: passwordTextField.text)
         ServicesManager.sharedInstance()?.loginManager.connect()
+        let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.indeterminate
+        loadingNotification.label.text = "Loading"
     }
     
     @objc func didLogin(notification: NSNotification) {
         DispatchQueue.main.async {
+            MBProgressHUD.hide(for: self.view, animated: true)
             let loginViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
             self.navigationController?.pushViewController(loginViewController, animated: true)
         }
         
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
-        
-    }
     
     @objc func failedToLogin(notification: NSNotification) {
         DispatchQueue.main.async { [self] in
+            MBProgressHUD.hide(for: self.view, animated: true)
             showBasicAlert(on: self, with: "Error", message: "your email or password may be wrong check again!")
         }
     }
@@ -115,7 +113,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         logo.layer.cornerRadius = logo.frame.size.width/2
         self.logo.clipsToBounds = true
     }
+    @objc func didReconnect(notification: NSNotification) {
+        DispatchQueue.main.async {
+            MBProgressHUD.hide(for: self.view, animated: true)
+            let loginViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
+            self.navigationController?.pushViewController(loginViewController, animated: true)
+        }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     
 }
-

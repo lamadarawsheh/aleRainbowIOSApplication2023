@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */; };
 		7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */; };
+		7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 7523E15929C8ABD200AF1ADB /* MBProgressHUD */; };
 		75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6229C31B6400279E92 /* AppDelegate.swift */; };
 		75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6429C31B6400279E92 /* SceneDelegate.swift */; };
-		75B47D6729C31B6400279E92 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6629C31B6400279E92 /* ViewController.swift */; };
+		75B47D6729C31B6400279E92 /* LoginViewControlleroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6629C31B6400279E92 /* LoginViewControlleroller.swift */; };
 		75B47D6A29C31B6400279E92 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75B47D6829C31B6400279E92 /* Main.storyboard */; };
 		75B47D6C29C31B6400279E92 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75B47D6B29C31B6400279E92 /* Assets.xcassets */; };
 		75B47D6F29C31B6400279E92 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 75B47D6D29C31B6400279E92 /* LaunchScreen.storyboard */; };
@@ -27,7 +28,7 @@
 		75B47D5F29C31B6400279E92 /* RainbowApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainbowApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75B47D6229C31B6400279E92 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		75B47D6429C31B6400279E92 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		75B47D6629C31B6400279E92 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		75B47D6629C31B6400279E92 /* LoginViewControlleroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControlleroller.swift; sourceTree = "<group>"; };
 		75B47D6929C31B6400279E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		75B47D6B29C31B6400279E92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75B47D6E29C31B6400279E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -41,6 +42,7 @@
 			files = (
 				75B47D7829C31CEB00279E92 /* Alamofire in Frameworks */,
 				75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */,
+				7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */,
 				75B47D7E29C31D7400279E92 /* WebRTC in Frameworks */,
 				75B47D7B29C31D3E00279E92 /* Rainbow in Frameworks */,
 			);
@@ -62,7 +64,7 @@
 		7517EACE29C86221008D6AD9 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				75B47D6629C31B6400279E92 /* ViewController.swift */,
+				75B47D6629C31B6400279E92 /* LoginViewControlleroller.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -134,6 +136,7 @@
 				75B47D7A29C31D3E00279E92 /* Rainbow */,
 				75B47D7D29C31D7400279E92 /* WebRTC */,
 				75B47D8029C31DAF00279E92 /* CryptoSwift */,
+				7523E15929C8ABD200AF1ADB /* MBProgressHUD */,
 			);
 			productName = RainbowApp;
 			productReference = 75B47D5F29C31B6400279E92 /* RainbowApp.app */;
@@ -168,6 +171,7 @@
 				75B47D7929C31D3E00279E92 /* XCRemoteSwiftPackageReference "Rainbow-iOS-SDK" */,
 				75B47D7C29C31D7400279E92 /* XCRemoteSwiftPackageReference "Rainbow-iOS-WebRTC" */,
 				75B47D7F29C31DAF00279E92 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
+				7523E15829C8ABD200AF1ADB /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
 			);
 			productRefGroup = 75B47D6029C31B6400279E92 /* Products */;
 			projectDirPath = "";
@@ -196,7 +200,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75B47D6729C31B6400279E92 /* ViewController.swift in Sources */,
+				75B47D6729C31B6400279E92 /* LoginViewControlleroller.swift in Sources */,
 				75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */,
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
 				7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */,
@@ -428,6 +432,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7523E15829C8ABD200AF1ADB /* XCRemoteSwiftPackageReference "MBProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jdg/MBProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		75B47D7629C31CEB00279E92 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -463,6 +475,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7523E15929C8ABD200AF1ADB /* MBProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7523E15829C8ABD200AF1ADB /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
+			productName = MBProgressHUD;
+		};
 		75B47D7729C31CEB00279E92 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 75B47D7629C31CEB00279E92 /* XCRemoteSwiftPackageReference "Alamofire" */;
