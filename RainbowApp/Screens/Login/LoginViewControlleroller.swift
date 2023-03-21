@@ -7,6 +7,17 @@
 
 import Rainbow
 import MBProgressHUD
+
+enum MyError: LocalizedError {
+    case runtimeError(String)
+    
+    public var errorDescription: String? {
+        switch self {
+        case .runtimeError(let message):
+            return message
+        }
+    }
+}
 class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var logo: UIImageView!
@@ -31,7 +42,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         view.addGestureRecognizer(tap)
         
         NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin(notification: )), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
         setImage()
         emailTextField.returnKeyType = UIReturnKeyType.next
         passwordTextField.returnKeyType = UIReturnKeyType.done
@@ -104,10 +115,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @objc func failedToLogin(notification: NSNotification) {
+    @objc func failedToLogin(notification: NSNotification ) {
         DispatchQueue.main.async { [self] in
+            var message = "Failed to Login"
+            if let error = notification.object as? NSError
+            {
+                message  = error.localizedDescription
+            }
+            
             MBProgressHUD.hide(for: self.view, animated: true)
-            showBasicAlert(on: self, with: "Error", message: "your email or password may be wrong check again!")
+            showBasicAlert(on: self, with: "Error", message: message)
         }
     }
     func setImage(){
