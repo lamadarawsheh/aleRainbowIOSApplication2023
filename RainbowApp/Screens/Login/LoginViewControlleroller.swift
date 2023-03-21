@@ -16,7 +16,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     override func viewDidLoad() {
-        
+        if ServicesManager.sharedInstance().myUser.isInitialized{
+            let tabbarViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
+            tabbarViewController.modalPresentationStyle = .fullScreen
+            self.present(tabbarViewController, animated: false, completion: nil)
+            
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow),
                                                name: UIResponder.keyboardDidShowNotification, object: nil)
@@ -24,8 +29,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        NotificationCenter.default.addObserver(self, selector: #selector(didReconnect(notification:)), name: NSNotification.Name(kLoginManagerDidReconnect), object: nil)
-        
         
         NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
@@ -56,20 +59,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.emailTextField.resignFirstResponder()
         }
     }
-    override func viewDidAppear(_ animated: Bool) {
-        if ServicesManager.sharedInstance().myUser.isInitialized{
-            print("hhhgsfsfsgsgsfsfg")
-            let loadingNotification = MBProgressHUD.showAdded(to: self.view, animated: true)
-            loadingNotification.mode = MBProgressHUDMode.indeterminate
-            loadingNotification.label.text = "Loading"
-        }
-        else
-        {
-            MBProgressHUD.hide(for: self.view, animated: true)
-            
-            print("rrfscdfscdcetcdt")
-        }
-    }
+    
     
     @objc func keyboardDidShow(notification: Notification) {
         let activeField = view
@@ -108,7 +98,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             MBProgressHUD.hide(for: self.view, animated: true)
             let loginViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
-            self.navigationController?.pushViewController(loginViewController, animated: true)
+            loginViewController.modalPresentationStyle = .fullScreen
+            self.present(loginViewController, animated: false)
         }
         
     }
@@ -124,13 +115,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.logo.layer.masksToBounds = false
         logo.layer.cornerRadius = logo.frame.size.width/2
         self.logo.clipsToBounds = true
-    }
-    @objc func didReconnect(notification: NSNotification) {
-        DispatchQueue.main.async {
-            
-            let tabbarViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
-            self.navigationController?.pushViewController(tabbarViewController, animated: true)
-        }
     }
     deinit {
         NotificationCenter.default.removeObserver(self)

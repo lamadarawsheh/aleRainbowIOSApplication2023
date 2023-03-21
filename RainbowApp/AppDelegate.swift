@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         NotificationCenter.default.addObserver(self, selector: #selector(didChangeServer(notification:)), name: NSNotification.Name(kLoginManagerDidChangeServer), object: nil)
         ServicesManager.sharedInstance()?.setAppID(appId, secretKey: appSecret)
-        if !(ServicesManager.sharedInstance().myUser.server?.isSandboxServer())!
+        if !((ServicesManager.sharedInstance().myUser.server?.isSandboxServer()) ?? false)
         {
             NotificationCenter.default.post(name: NSNotification.Name(kLoginManagerDidChangeServer), object: ["serverURL" : "sandbox.openrainbow.com"])
         }

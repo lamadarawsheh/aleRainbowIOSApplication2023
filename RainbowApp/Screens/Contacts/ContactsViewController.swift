@@ -26,14 +26,16 @@ class ContactsViewController: UIViewController {
         let cgImage =   UIImage(cgImage: (image?.cgImage)!, scale: 1.0, orientation: .upMirrored)
         logoutButton.setBackgroundImage(cgImage,for: .normal)
         
-        logoutButton.addTarget(self, action: #selector(goToEdit(sender: )), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(goToLogin(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoutButton)
         
         
     }
     
-    @objc func goToEdit(sender: UIBarButtonItem) {
-        self.parent?.navigationController?.popToRootViewController(animated: true)
+    @objc func goToLogin(sender: UIBarButtonItem) {
+        let loginViewController  = self.storyboard?.instantiateViewController(identifier: "Login") as!   UINavigationController
+        loginViewController.modalPresentationStyle = .fullScreen
+        self.present(loginViewController, animated: false, completion: nil)
         signout()
     }
     func signout() {
@@ -42,6 +44,7 @@ class ContactsViewController: UIViewController {
     }
     
     @objc func didLogout(notification: NSNotification) {
+        NSLog("LOGOUT DONE ")
     }
     
     override func viewWillAppear(_ animated: Bool) {
