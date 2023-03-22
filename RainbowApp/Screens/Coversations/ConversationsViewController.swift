@@ -9,15 +9,17 @@ import UIKit
 import Rainbow
 class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     
+    @IBOutlet weak var noConversationsLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var conversations: [Conversation] = [Conversation]() {
         didSet {
+            if conversations.count == 0
+            {
+                noConversationsLabel.isHidden = false
+            }
         }
     }
-    var data:Data = Data () {
-        didSet {
-        }
-    }
+    
     var contacts:[Contact] = [Contact](){
         didSet {
             tableView.reloadData()
@@ -85,20 +87,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
     }
-    func getuserAvatar(_ rainbowID:String){
-        
-        let contact = contacts.first(where: {$0.rainbowID == rainbowID})
-        
-        if contact != nil
-        {
-            if contact?.photoData != nil
-            {
-                self.data = (contact?.photoData)!
-            }
-        }
-        
-        
-    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
@@ -113,15 +102,9 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)as!
         CustomTableViewCell
-        
-        cell.nameLabel.text = conversations[indexPath.row].peer?.displayName
-        
-        cell.messageLabel.text = conversations[indexPath.row].lastMessage?.body
-        cell.dateLabel.text  = String ((conversations[indexPath.row].lastMessage?.date.formatted(date: .numeric, time: .shortened).split(separator: ",").last)! )
-        
-        getuserAvatar((conversations[indexPath.row].peer?.rainbowID)!)
-        cell.setImage(self.data)
-        
+        cell.contacts =  contacts
+        conversations = conversations.sorted(by: {($0.lastMessage?.timestamp) ?? Date() > ($1.lastMessage?.timestamp) ?? Date()})
+        cell.conversation = conversations[indexPath.row]
         return cell
         
     }
