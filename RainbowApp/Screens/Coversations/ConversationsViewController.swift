@@ -7,10 +7,28 @@
 
 import UIKit
 import Rainbow
-class ConversationsViewController: UIViewController {
+class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     
+    @IBOutlet weak var tableView: UITableView!
+    var conversations: [Conversation] = [Conversation]() {
+        didSet {
+        }
+    }
+    var data:Data = Data () {
+        didSet {
+        }
+    }
+    var contacts:[Contact] = [Contact](){
+        didSet {
+            tableView.reloadData()
+        }
+    }
     override func viewDidLoad() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidEndLoadingConversations), object: nil)
+        tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
         
+        tableView.dataSource = self
+        tableView.delegate = self
         configureItems()
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -31,6 +49,16 @@ class ConversationsViewController: UIViewController {
         
         
     }
+    
+    @objc func didFinishLoading(notification: NSNotification) {
+        DispatchQueue.main.async {
+            self.conversations =  ServicesManager.sharedInstance().conversationsManagerService.conversations
+            self.contacts =  (ServicesManager.sharedInstance()?.contactsManagerService.myNetworkContacts)!
+            
+        }
+        
+    }
+    
     @objc func goToLogin(sender: UIBarButtonItem) {
         let loginViewController  = self.storyboard?.instantiateViewController(identifier: "Login") as!   UINavigationController
         loginViewController.modalPresentationStyle = .fullScreen
@@ -56,6 +84,46 @@ class ConversationsViewController: UIViewController {
         super.viewDidDisappear(animated)
         
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+    }
+    func getuserAvatar(_ rainbowID:String){
+        
+        let contact = contacts.first(where: {$0.rainbowID == rainbowID})
+        
+        if contact != nil
+        {
+            if contact?.photoData != nil
+            {
+                self.data = (contact?.photoData)!
+            }
+        }
+        
+        
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
+        
+        return self.conversations.count
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)as!
+        CustomTableViewCell
+        
+        cell.nameLabel.text = conversations[indexPath.row].peer?.displayName
+        
+        cell.messageLabel.text = conversations[indexPath.row].lastMessage?.body
+        cell.dateLabel.text  = String ((conversations[indexPath.row].lastMessage?.date.formatted(date: .numeric, time: .shortened).split(separator: ",").last)! )
+        
+        getuserAvatar((conversations[indexPath.row].peer?.rainbowID)!)
+        cell.setImage(self.data)
+        
+        return cell
+        
     }
     
     

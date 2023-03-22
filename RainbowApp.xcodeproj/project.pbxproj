@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		750C01CD29CA054900A69045 /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750C01CC29CA054900A69045 /* CustomTableViewCell.swift */; };
 		7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */; };
 		7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */; };
 		7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 7523E15929C8ABD200AF1ADB /* MBProgressHUD */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		750C01CC29CA054900A69045 /* CustomTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		75B47D5F29C31B6400279E92 /* RainbowApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainbowApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +74,7 @@
 		7517EACF29C8623D008D6AD9 /* Coversations */ = {
 			isa = PBXGroup;
 			children = (
+				750C01CC29CA054900A69045 /* CustomTableViewCell.swift */,
 				7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */,
 			);
 			path = Coversations;
@@ -200,6 +203,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				750C01CD29CA054900A69045 /* CustomTableViewCell.swift in Sources */,
 				75B47D6729C31B6400279E92 /* LoginViewControlleroller.swift in Sources */,
 				75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */,
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
