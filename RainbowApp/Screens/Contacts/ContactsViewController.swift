@@ -12,7 +12,7 @@ class ContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureItems()
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
         // Do any additional setup after loading the view.
     }
     func configureItems(){
@@ -26,37 +26,29 @@ class ContactsViewController: UIViewController {
         let cgImage =   UIImage(cgImage: (image?.cgImage)!, scale: 1.0, orientation: .upMirrored)
         logoutButton.setBackgroundImage(cgImage,for: .normal)
         
-        logoutButton.addTarget(self, action: #selector(goToLogin(sender: )), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(signout(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoutButton)
         
         
     }
     
-    @objc func goToLogin(sender: UIBarButtonItem) {
-        let loginViewController  = self.storyboard?.instantiateViewController(identifier: "Login") as!   UINavigationController
-        loginViewController.modalPresentationStyle = .fullScreen
-        self.present(loginViewController, animated: false, completion: nil)
-        signout()
-    }
-    func signout() {
+    
+    @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
         ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
+        
     }
     
     @objc func didLogout(notification: NSNotification) {
-        NSLog("LOGOUT DONE ")
+        DispatchQueue.main.async{
+            self.dismiss(animated: false)
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
-    }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     

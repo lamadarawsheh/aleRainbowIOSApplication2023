@@ -20,13 +20,14 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         }
     }
     
-    var contacts:[Contact] = [Contact](){
-        didSet {
-            tableView.reloadData()
-        }
-    }
     override func viewDidLoad() {
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidEndLoadingConversations), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidAddConversation), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidRemoveConversation), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateConversation), object: nil)
+        
         tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
         
         tableView.dataSource = self
@@ -46,46 +47,36 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         let cgImage =   UIImage(cgImage: (image?.cgImage)!, scale: 1.0, orientation: .upMirrored)
         logoutButton.setBackgroundImage(cgImage,for: .normal)
         
-        logoutButton.addTarget(self, action: #selector(goToLogin(sender: )), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(signout(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoutButton)
         
         
     }
     
     @objc func didFinishLoading(notification: NSNotification) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             self.conversations =  ServicesManager.sharedInstance().conversationsManagerService.conversations
-            self.contacts =  (ServicesManager.sharedInstance()?.contactsManagerService.myNetworkContacts)!
+            self.conversations = conversations.sorted(by: {($0.lastMessage?.timestamp) ?? Date() > ($1.lastMessage?.timestamp) ?? Date()})
+            self.tableView.reloadData()
             
         }
-        
     }
     
-    @objc func goToLogin(sender: UIBarButtonItem) {
-        let loginViewController  = self.storyboard?.instantiateViewController(identifier: "Login") as!   UINavigationController
-        loginViewController.modalPresentationStyle = .fullScreen
-        self.present(loginViewController, animated: false, completion: nil)
-        signout()
-    }
-    func signout() {
+    @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
         ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
+        
     }
     
     @objc func didLogout(notification: NSNotification) {
-        NSLog("LOGOUT DONE ")
+        DispatchQueue.main.async{
+            self.dismiss(animated: false)
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
-    }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -102,8 +93,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)as!
         CustomTableViewCell
-        cell.contacts =  contacts
-        conversations = conversations.sorted(by: {($0.lastMessage?.timestamp) ?? Date() > ($1.lastMessage?.timestamp) ?? Date()})
+        cell.configureImageView()
         cell.conversation = conversations[indexPath.row]
         return cell
         
