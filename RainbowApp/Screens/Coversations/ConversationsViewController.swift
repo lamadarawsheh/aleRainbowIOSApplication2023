@@ -7,6 +7,7 @@
 
 import UIKit
 import Rainbow
+import MBProgressHUD
 class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     
     @IBOutlet weak var noConversationsLabel: UILabel!
@@ -27,8 +28,8 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidAddConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidRemoveConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateConversation), object: nil)
-        
-        tableView.register(UITableViewCell.self,forCellReuseIdentifier:"cell")
+        let nib = UINib(nibName: "CustomTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "CustomTableViewCell")
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -64,12 +65,15 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     
     @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
-        ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
-        
+        let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.indeterminate
+        loadingNotification.label.text = "Loading"
     }
     
     @objc func didLogout(notification: NSNotification) {
         DispatchQueue.main.async{
+            MBProgressHUD.hide(for: self.view, animated: true)
+            ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
             self.dismiss(animated: false)
         }
     }
@@ -90,10 +94,9 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)as!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell")as!
         CustomTableViewCell
-        cell.configureImageView()
+        
         cell.conversation = conversations[indexPath.row]
         return cell
         

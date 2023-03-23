@@ -1,19 +1,27 @@
 //
-//  CustomTableViewCell.swift
-//  AlmoTest
+//  CustomTableViewCelll.swift
+//  RainbowApp
 //
-//  Created by Lama Darawsheh on 22/02/2023.
+//  Created by Lama Darawsheh on 23/03/2023.
 //
 
 import UIKit
 import Rainbow
 class CustomTableViewCell: UITableViewCell {
     
-    
-    @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageIcon: UIImageView!
+    override func awakeFromNib() {
+        configureImageView()
+        super.awakeFromNib()
+        
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
     
     var conversation:Conversation? = nil{
         didSet {
@@ -93,7 +101,6 @@ class CustomTableViewCell: UITableViewCell {
         }
         return nil
     }
-    
     
     
 }

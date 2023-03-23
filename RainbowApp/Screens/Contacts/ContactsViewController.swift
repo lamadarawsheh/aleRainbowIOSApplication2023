@@ -7,6 +7,7 @@
 
 import UIKit
 import Rainbow
+import MBProgressHUD
 class ContactsViewController: UIViewController {
     
     override func viewDidLoad() {
@@ -35,12 +36,15 @@ class ContactsViewController: UIViewController {
     
     @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
-        ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
-        
+        let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.indeterminate
+        loadingNotification.label.text = "Loading"
     }
     
     @objc func didLogout(notification: NSNotification) {
         DispatchQueue.main.async{
+            MBProgressHUD.hide(for: self.view, animated: true)
+            ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
             self.dismiss(animated: false)
         }
     }
