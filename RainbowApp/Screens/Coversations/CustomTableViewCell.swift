@@ -14,8 +14,8 @@ class CustomTableViewCell: UITableViewCell {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var imageIcon: UIImageView!
     override func awakeFromNib() {
-        configureImageView()
         super.awakeFromNib()
+        configureImageView()
         
     }
     
@@ -57,23 +57,20 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func setImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?){
-        var name:String = ""
-        if  let firstName = firstName?.first  as? Character {
-            name.append(firstName)
-        }
-        if  let lastName = lastName?.first  as? Character {
-            name.append(lastName)
-        }
-        
-        let image =  imageWith(name: name)
         if let data = data {
-            if !data.isEmpty
-            {
-                imageIcon.image = UIImage(data: data)
-            }
+            imageIcon.image = UIImage(data: data)
         }
         else {
-            imageIcon.image = image
+            var name:String = ""
+            if  let firstName = firstName?.first  as? Character {
+                name.append(firstName)
+            }
+            
+            if  let lastName = lastName?.first  as? Character {
+                name.append(lastName)
+            }
+                        
+            imageIcon.image = imageWith(name: name)
         }
         
     }
