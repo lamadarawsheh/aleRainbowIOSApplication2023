@@ -7,10 +7,32 @@
 
 import UIKit
 import Rainbow
-class ConversationsViewController: UIViewController {
+import MBProgressHUD
+class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+    
+    @IBOutlet weak var noConversationsLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    var conversations: [Conversation] = [Conversation]() {
+        didSet {
+            if conversations.count == 0
+            {
+                noConversationsLabel.isHidden = false
+            }
+        }
+    }
     
     override func viewDidLoad() {
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidEndLoadingConversations), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidAddConversation), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidRemoveConversation), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateConversation), object: nil)
+        let nib = UINib(nibName: "CustomTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "CustomTableViewCell")
+        
+        tableView.dataSource = self
+        tableView.delegate = self
         configureItems()
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -26,36 +48,58 @@ class ConversationsViewController: UIViewController {
         let cgImage =   UIImage(cgImage: (image?.cgImage)!, scale: 1.0, orientation: .upMirrored)
         logoutButton.setBackgroundImage(cgImage,for: .normal)
         
-        logoutButton.addTarget(self, action: #selector(goToLogin(sender: )), for: .touchUpInside)
+        logoutButton.addTarget(self, action: #selector(signout(sender: )), for: .touchUpInside)
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: logoutButton)
         
         
     }
-    @objc func goToLogin(sender: UIBarButtonItem) {
-        let loginViewController  = self.storyboard?.instantiateViewController(identifier: "Login") as!   UINavigationController
-        loginViewController.modalPresentationStyle = .fullScreen
-        self.present(loginViewController, animated: false, completion: nil)
-        signout()
+    
+    @objc func didFinishLoading(notification: NSNotification) {
+        DispatchQueue.main.async { [self] in
+            self.conversations =  ServicesManager.sharedInstance().conversationsManagerService.conversations
+            self.conversations = conversations.sorted(by: {($0.lastMessage?.timestamp) ?? Date() > ($1.lastMessage?.timestamp) ?? Date()})
+            self.tableView.reloadData()
+            
+        }
     }
-    func signout() {
+    
+    @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
-        ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
+        let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
+        loadingNotification.mode = MBProgressHUDMode.indeterminate
+        loadingNotification.label.text = "Loading"
     }
     
     @objc func didLogout(notification: NSNotification) {
-        NSLog("LOGOUT DONE ")
+        DispatchQueue.main.async{
+            MBProgressHUD.hide(for: self.view, animated: true)
+            ServicesManager.sharedInstance()?.loginManager.resetAllCredentials()
+            self.dismiss(animated: false)
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
+        
+        return self.conversations.count
+        
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CustomTableViewCell")as!
+        CustomTableViewCell
+        
+        cell.conversation = conversations[indexPath.row]
+        return cell
+        
     }
     
     

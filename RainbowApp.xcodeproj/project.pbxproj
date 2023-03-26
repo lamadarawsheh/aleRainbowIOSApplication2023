@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7505BB5629CC829200210D0B /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7505BB5429CC829200210D0B /* CustomTableViewCell.swift */; };
+		7505BB5729CC829200210D0B /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7505BB5529CC829200210D0B /* CustomTableViewCell.xib */; };
 		7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */; };
 		7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */; };
 		7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 7523E15929C8ABD200AF1ADB /* MBProgressHUD */; };
@@ -23,6 +25,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7505BB5429CC829200210D0B /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
+		7505BB5529CC829200210D0B /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
 		7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		75B47D5F29C31B6400279E92 /* RainbowApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainbowApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +76,7 @@
 		7517EACF29C8623D008D6AD9 /* Coversations */ = {
 			isa = PBXGroup;
 			children = (
+				7505BB5429CC829200210D0B /* CustomTableViewCell.swift */,
 				7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */,
 			);
 			path = Coversations;
@@ -108,8 +113,9 @@
 				75B47D6229C31B6400279E92 /* AppDelegate.swift */,
 				75B47D6429C31B6400279E92 /* SceneDelegate.swift */,
 				75B47D6829C31B6400279E92 /* Main.storyboard */,
-				75B47D6B29C31B6400279E92 /* Assets.xcassets */,
+				7505BB5529CC829200210D0B /* CustomTableViewCell.xib */,
 				75B47D6D29C31B6400279E92 /* LaunchScreen.storyboard */,
+				75B47D6B29C31B6400279E92 /* Assets.xcassets */,
 				75B47D7029C31B6400279E92 /* Info.plist */,
 			);
 			path = RainbowApp;
@@ -190,6 +196,7 @@
 				75B47D6F29C31B6400279E92 /* LaunchScreen.storyboard in Resources */,
 				75B47D6C29C31B6400279E92 /* Assets.xcassets in Resources */,
 				75B47D6A29C31B6400279E92 /* Main.storyboard in Resources */,
+				7505BB5729CC829200210D0B /* CustomTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,6 +211,7 @@
 				75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */,
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
 				7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */,
+				7505BB5629CC829200210D0B /* CustomTableViewCell.swift in Sources */,
 				7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
