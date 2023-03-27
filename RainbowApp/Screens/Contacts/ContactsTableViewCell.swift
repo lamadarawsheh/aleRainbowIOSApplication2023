@@ -8,8 +8,6 @@
 import UIKit
 import Rainbow
 class ContactsTableViewCell: UITableViewCell {
-    
-    
     @IBOutlet weak var infoButton: UIButton!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -17,60 +15,29 @@ class ContactsTableViewCell: UITableViewCell {
     var delegate: ViewActionDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
-        setButton()
-        ImageConfigurations().configureImageView(imageIcon)
+        self.infoButton.setTitle("", for: .normal)
+        ImageHelper().configureImageView(imageIcon)
     }
     
     @IBAction func infoButtonTapped(_ sender: Any) {
-        delegate?.viewInfo(contact!)
+        delegate?.viewContactInfo(contact!)
     }
     
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
-    
     var contact:Contact? = nil{
         didSet {
             if let contact = contact {
-                
-                
                 nameLabel.text = contact.displayName
                 statusLabel.text = contact.presence.description
                 if let status = contact.presence{
-                    statusLabel.text = contact.presence.description
-                    
+                    statusLabel.text = status.description
                 }
+                imageIcon = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName,imageIcon)
                 
-                setImage(contact.photoData,contact.firstName ,contact.lastName)
-                
             }
-            
         }
     }
-    func setImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?){
-        if let data = data {
-            imageIcon.image = UIImage(data: data)
-        }
-        else {
-            var name:String = ""
-            if  let firstName = firstName?.first  as? Character {
-                name.append(firstName)
-            }
-            
-            if  let lastName = lastName?.first  as? Character {
-                name.append(lastName)
-            }
-            
-            imageIcon.image = ImageConfigurations().imageWith(name: name)
-        }
-        
-    }
-    
-    func setButton(){
-        self.infoButton.setTitle("", for: .normal)
-        
-    }
-    
 }

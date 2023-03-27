@@ -7,10 +7,7 @@
 import UIKit
 import Rainbow
 import Foundation
-class ImageConfigurations {
-    
-    
-    
+class ImageHelper {
     func configureImageView(_ imageIcon:UIImageView){
         imageIcon.layer.borderWidth = 1.0
         imageIcon.layer.masksToBounds = false
@@ -24,11 +21,9 @@ class ImageConfigurations {
         let beginImage = CIImage(image: imageIcon.image!)
         currentFilter!.setValue(beginImage, forKey: kCIInputImageKey)
         currentFilter!.setValue(10, forKey: kCIInputRadiusKey)
-        
         let cropFilter = CIFilter(name: "CICrop")
         cropFilter!.setValue(currentFilter!.outputImage, forKey: kCIInputImageKey)
         cropFilter!.setValue(CIVector(cgRect: beginImage!.extent), forKey: "inputRectangle")
-        
         let output = cropFilter!.outputImage
         let cgimg = context.createCGImage(output!, from: output!.extent)
         let processedImage = UIImage(cgImage: cgimg!)
@@ -51,8 +46,23 @@ class ImageConfigurations {
         }
         return nil
     }
-    
-    
-    
-    
+    func getImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?,_ imageIcon:UIImageView
+    )-> UIImageView{
+        if let data = data {
+            imageIcon.image = UIImage(data: data)
+        }
+        else {
+            var name:String = ""
+            if  let firstName = firstName?.first  as? Character {
+                name.append(firstName)
+            }
+            
+            if  let lastName = lastName?.first  as? Character {
+                name.append(lastName)
+            }
+            
+            imageIcon.image = imageWith(name: name)
+        }
+        return imageIcon
+    }
 }

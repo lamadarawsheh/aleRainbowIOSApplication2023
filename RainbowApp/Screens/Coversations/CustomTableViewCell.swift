@@ -15,8 +15,7 @@ class CustomTableViewCell: UITableViewCell {
     @IBOutlet weak var imageIcon: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        ImageConfigurations().configureImageView(imageIcon)
-        
+        ImageHelper().configureImageView(imageIcon)
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -27,7 +26,6 @@ class CustomTableViewCell: UITableViewCell {
         didSet {
             if let conversation = conversation {
                 nameLabel.text = conversation.peer?.displayName
-                
                 messageLabel.text = conversation.lastMessage?.body
                 let firstDate = formate(conversation.lastMessage?.date ?? Date())
                 let seconedDate = formate(Date())
@@ -36,15 +34,12 @@ class CustomTableViewCell: UITableViewCell {
                 }
                 else{
                     dateLabel.text  = String(conversation.lastMessage?.date.formatted(date: .numeric, time: .shortened).split(separator: ",").last ?? "")
-                    
                 }
                 
                 if let contact = conversation.peer as? Contact {
-                    setImage(contact.photoData,contact.firstName ,contact.lastName)
+                    imageIcon = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName,imageIcon)
                 }
-                
             }
-            
         }
     }
     func formate(_ date:Date)->Date{
@@ -55,26 +50,5 @@ class CustomTableViewCell: UITableViewCell {
         let formattedDate = formatter.date(from:stringDate)
         return formattedDate ?? Date()
     }
-    
-    func setImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?){
-        if let data = data {
-            imageIcon.image = UIImage(data: data)
-        }
-        else {
-            var name:String = ""
-            if  let firstName = firstName?.first  as? Character {
-                name.append(firstName)
-            }
-            
-            if  let lastName = lastName?.first  as? Character {
-                name.append(lastName)
-            }
-            
-            imageIcon.image = ImageConfigurations().imageWith(name: name)
-        }
-        
-    }
-    
-    
     
 }
