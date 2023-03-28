@@ -46,11 +46,9 @@ class ImageHelper {
         }
         return nil
     }
-    func getImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?
-    )-> UIImage{
+    func getImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?) -> UIImage? {
         if let data = data {
-            let image = UIImage(data: data)!
-            return image
+            return UIImage(data: data)!
         }
         else {
             var name:String = ""
@@ -61,9 +59,8 @@ class ImageHelper {
             if  let lastName = lastName?.first  as? Character {
                 name.append(lastName)
             }
-            
-           let image = imageWith(name: name)
-            return image!
+           
+            return imageWith(name: name)
         }
        
     }
