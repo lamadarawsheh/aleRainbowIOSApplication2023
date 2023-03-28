@@ -46,10 +46,11 @@ class ImageHelper {
         }
         return nil
     }
-    func getImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?,_ imageIcon:UIImageView
-    )-> UIImageView{
+    func getImage(_ data:Data? ,_ firstName:String? ,_ lastName:String?
+    )-> UIImage{
         if let data = data {
-            imageIcon.image = UIImage(data: data)
+            let image = UIImage(data: data)!
+            return image
         }
         else {
             var name:String = ""
@@ -61,8 +62,9 @@ class ImageHelper {
                 name.append(lastName)
             }
             
-            imageIcon.image = imageWith(name: name)
+           let image = imageWith(name: name)
+            return image!
         }
-        return imageIcon
+       
     }
 }

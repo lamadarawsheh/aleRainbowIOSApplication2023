@@ -31,11 +31,11 @@ class ContactsTableViewCell: UITableViewCell {
         didSet {
             if let contact = contact {
                 nameLabel.text = contact.displayName
-                statusLabel.text = contact.presence.description
+                
                 if let status = contact.presence{
                     statusLabel.text = status.description
                 }
-                imageIcon = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName,imageIcon)
+                imageIcon.image = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName)
                 
             }
         }

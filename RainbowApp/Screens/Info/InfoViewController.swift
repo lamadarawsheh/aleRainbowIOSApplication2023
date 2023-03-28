@@ -30,8 +30,8 @@ class InfoViewController: UIViewController {
         nameLabel.text = contact?.displayName
         companyLabel.text = contact?.companyName
         title = (contact?.firstName ?? "User") + "'s information"
-        smallIcon = ImageHelper().getImage(contact?.photoData,contact?.firstName ,contact?.lastName,smallIcon)
-        bigIcon = ImageHelper().getImage(contact?.photoData,contact?.firstName ,contact?.lastName,bigIcon)
+        smallIcon.image = ImageHelper().getImage(contact?.photoData,contact?.firstName ,contact?.lastName)
+        bigIcon.image = ImageHelper().getImage(contact?.photoData,contact?.firstName ,contact?.lastName)
         ImageHelper().blurEffect(bigIcon)
         
         if let emails = contact?.emailAddresses{

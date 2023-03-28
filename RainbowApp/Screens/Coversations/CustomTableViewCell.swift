@@ -37,7 +37,7 @@ class CustomTableViewCell: UITableViewCell {
                 }
                 
                 if let contact = conversation.peer as? Contact {
-                    imageIcon = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName,imageIcon)
+                    imageIcon.image = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName)
                 }
             }
         }
