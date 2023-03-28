@@ -7,22 +7,9 @@
 
 import Rainbow
 import MBProgressHUD
-
-enum MyError: LocalizedError {
-    case runtimeError(String)
-    
-    public var errorDescription: String? {
-        switch self {
-        case .runtimeError(let message):
-            return message
-        }
-    }
-}
 class LoginViewController: UIViewController, UITextFieldDelegate {
-    
     @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
@@ -31,16 +18,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             let tabbarViewController  = self.storyboard?.instantiateViewController(identifier: "tabbarView") as!   UITabBarController
             tabbarViewController.modalPresentationStyle = .fullScreen
             self.present(tabbarViewController, animated: false, completion: nil)
-            
         }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow),
                                                name: UIResponder.keyboardDidShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden),
                                                name: UIResponder.keyboardWillHideNotification, object: nil)
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(didLogin(notification:)), name: NSNotification.Name(kLoginManagerDidLoginSucceeded), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(failedToLogin(notification: )), name: NSNotification.Name(kLoginManagerDidFailedToAuthenticate), object: nil)
         setImage()
@@ -50,12 +34,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         super.viewDidLoad()
     }
-    @objc func dismissKeyboard()
-    {
+    @objc func dismissKeyboard(){
         view.endEditing(true)
     }
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool{
         switchBasedNextTextField(textField)
         return true
     }
@@ -87,7 +69,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         scrollView.scrollIndicatorInsets = contentInsets
     }
     func showBasicAlert(on vc: UIViewController, with title: String, message: String){
-        
         let alert =  UIAlertController.init(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction.init(title: "OK", style: .default)
         
@@ -95,7 +76,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         DispatchQueue.main.async {
             vc.present(alert, animated: true, completion: nil)
         }
-        
     }
     @IBAction func loginButtonTapped(_ sender: Any) {
         ServicesManager.sharedInstance()?.loginManager.setUsername(emailTextField.text, andPassword: passwordTextField.text)
@@ -118,8 +98,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @objc func failedToLogin(notification: NSNotification ) {
         DispatchQueue.main.async { [self] in
             var message = "Failed to Login"
-            if let error = notification.object as? NSError
-            {
+            if let error = notification.object as? NSError{
                 message  = error.localizedDescription
             }
             
@@ -136,6 +115,4 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
-    
 }
