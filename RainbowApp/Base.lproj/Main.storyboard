@@ -440,6 +440,21 @@
             </objects>
             <point key="canvasLocation" x="4092.3664122137402" y="-83.098591549295776"/>
         </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="gCF-Fu-OuV">
+            <objects>
+                <viewController storyboardIdentifier="chatView" hidesBottomBarWhenPushed="YES" id="hty-cZ-wos" customClass="ChatViewController" customModule="RainbowApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Pnm-x3-ayz">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="jvB-yP-Gaa"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="86r-9y-QcJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4913" y="-75"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="uAg-If-sYF">
             <objects>

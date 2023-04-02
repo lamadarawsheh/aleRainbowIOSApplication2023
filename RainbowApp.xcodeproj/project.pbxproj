@@ -12,10 +12,12 @@
 		7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */; };
 		7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */; };
 		7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 7523E15929C8ABD200AF1ADB /* MBProgressHUD */; };
+		753EA14929D2EA16009C54AF /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753EA14829D2EA16009C54AF /* ChatViewController.swift */; };
 		75435BB629D039BB008C94F6 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BB429D039BB008C94F6 /* ContactsTableViewCell.swift */; };
 		75435BB729D039BB008C94F6 /* ContactsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75435BB529D039BB008C94F6 /* ContactsTableViewCell.xib */; };
 		75435BBA29D0682C008C94F6 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BB929D0682C008C94F6 /* InfoViewController.swift */; };
 		75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */; };
+		75435BC429D2E82D008C94F6 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 75435BC329D2E82D008C94F6 /* MessageKit */; };
 		75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6229C31B6400279E92 /* AppDelegate.swift */; };
 		75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6429C31B6400279E92 /* SceneDelegate.swift */; };
 		75B47D6729C31B6400279E92 /* LoginViewControlleroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6629C31B6400279E92 /* LoginViewControlleroller.swift */; };
@@ -26,6 +28,7 @@
 		75B47D7B29C31D3E00279E92 /* Rainbow in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D7A29C31D3E00279E92 /* Rainbow */; };
 		75B47D7E29C31D7400279E92 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D7D29C31D7400279E92 /* WebRTC */; };
 		75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D8029C31DAF00279E92 /* CryptoSwift */; };
+		75FC0AF929D583DB002F080F /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FC0AF829D583DB002F080F /* Message.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +36,7 @@
 		7505BB5529CC829200210D0B /* CustomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell.xib; sourceTree = "<group>"; };
 		7517EAD129C86292008D6AD9 /* ConversationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsViewController.swift; sourceTree = "<group>"; };
 		7517EAD329C862AE008D6AD9 /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
+		753EA14829D2EA16009C54AF /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		75435BB429D039BB008C94F6 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 		75435BB529D039BB008C94F6 /* ContactsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactsTableViewCell.xib; sourceTree = "<group>"; };
 		75435BB929D0682C008C94F6 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
@@ -45,6 +49,7 @@
 		75B47D6B29C31B6400279E92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75B47D6E29C31B6400279E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75B47D7029C31B6400279E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		75FC0AF829D583DB002F080F /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +60,7 @@
 				75B47D7829C31CEB00279E92 /* Alamofire in Frameworks */,
 				75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */,
 				7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */,
+				75435BC429D2E82D008C94F6 /* MessageKit in Frameworks */,
 				75B47D7E29C31D7400279E92 /* WebRTC in Frameworks */,
 				75B47D7B29C31D3E00279E92 /* Rainbow in Frameworks */,
 			);
@@ -66,6 +72,7 @@
 		7517EACD29C86213008D6AD9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				75435BC529D2E896008C94F6 /* Chat */,
 				75435BB829D06806008C94F6 /* Info */,
 				7517EAD029C8624B008D6AD9 /* Contacts */,
 				7517EACF29C8623D008D6AD9 /* Coversations */,
@@ -109,6 +116,14 @@
 			path = Info;
 			sourceTree = "<group>";
 		};
+		75435BC529D2E896008C94F6 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				753EA14829D2EA16009C54AF /* ChatViewController.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
 		75B47D5629C31B6400279E92 = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +147,7 @@
 				75B47D6229C31B6400279E92 /* AppDelegate.swift */,
 				75B47D6429C31B6400279E92 /* SceneDelegate.swift */,
 				75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */,
+				75FC0AF829D583DB002F080F /* Message.swift */,
 				75B47D6829C31B6400279E92 /* Main.storyboard */,
 				7505BB5529CC829200210D0B /* CustomTableViewCell.xib */,
 				75B47D6D29C31B6400279E92 /* LaunchScreen.storyboard */,
@@ -163,6 +179,7 @@
 				75B47D7D29C31D7400279E92 /* WebRTC */,
 				75B47D8029C31DAF00279E92 /* CryptoSwift */,
 				7523E15929C8ABD200AF1ADB /* MBProgressHUD */,
+				75435BC329D2E82D008C94F6 /* MessageKit */,
 			);
 			productName = RainbowApp;
 			productReference = 75B47D5F29C31B6400279E92 /* RainbowApp.app */;
@@ -198,6 +215,7 @@
 				75B47D7C29C31D7400279E92 /* XCRemoteSwiftPackageReference "Rainbow-iOS-WebRTC" */,
 				75B47D7F29C31DAF00279E92 /* XCRemoteSwiftPackageReference "CryptoSwift" */,
 				7523E15829C8ABD200AF1ADB /* XCRemoteSwiftPackageReference "MBProgressHUD" */,
+				75435BC229D2E82D008C94F6 /* XCRemoteSwiftPackageReference "MessageKit" */,
 			);
 			productRefGroup = 75B47D6029C31B6400279E92 /* Products */;
 			projectDirPath = "";
@@ -234,8 +252,10 @@
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
 				7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */,
 				7505BB5629CC829200210D0B /* CustomTableViewCell.swift in Sources */,
+				75FC0AF929D583DB002F080F /* Message.swift in Sources */,
 				75435BBA29D0682C008C94F6 /* InfoViewController.swift in Sources */,
 				75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */,
+				753EA14929D2EA16009C54AF /* ChatViewController.swift in Sources */,
 				7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -472,6 +492,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		75435BC229D2E82D008C94F6 /* XCRemoteSwiftPackageReference "MessageKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MessageKit/MessageKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		75B47D7629C31CEB00279E92 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -511,6 +539,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7523E15829C8ABD200AF1ADB /* XCRemoteSwiftPackageReference "MBProgressHUD" */;
 			productName = MBProgressHUD;
+		};
+		75435BC329D2E82D008C94F6 /* MessageKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75435BC229D2E82D008C94F6 /* XCRemoteSwiftPackageReference "MessageKit" */;
+			productName = MessageKit;
 		};
 		75B47D7729C31CEB00279E92 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;

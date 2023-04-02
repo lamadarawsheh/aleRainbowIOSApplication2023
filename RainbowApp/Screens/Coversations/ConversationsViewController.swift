@@ -72,7 +72,9 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let chat  = self.storyboard?.instantiateViewController(identifier: "chatView") as!   ChatViewController
+        chat.conversation = conversations[indexPath.row]
+        self.navigationController?.pushViewController(chat, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
