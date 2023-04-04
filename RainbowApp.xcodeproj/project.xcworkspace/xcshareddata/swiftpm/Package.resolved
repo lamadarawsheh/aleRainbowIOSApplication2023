@@ -28,6 +28,15 @@
       }
     },
     {
+      "identity" : "marqueelabel",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cbpowell/MarqueeLabel",
+      "state" : {
+        "revision" : "f2c72a5f8568579dade6350dc26a482076d3d346",
+        "version" : "4.3.0"
+      }
+    },
+    {
       "identity" : "mbprogresshud",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/jdg/MBProgressHUD.git",
@@ -46,6 +55,15 @@
       }
     },
     {
+      "identity" : "notificationbanner",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Daltron/NotificationBanner",
+      "state" : {
+        "revision" : "a9ec5cd29b4669f5fdf3dcd494a08cea4776913c",
+        "version" : "3.2.0"
+      }
+    },
+    {
       "identity" : "rainbow-ios-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Rainbow-CPaaS/Rainbow-iOS-SDK.git",
@@ -61,6 +79,15 @@
       "state" : {
         "revision" : "2a46a94502b580a113e9f868629b9a70ee4d4730",
         "version" : "1.1.38197"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit",
+      "state" : {
+        "revision" : "f222cbdf325885926566172f6f5f06af95473158",
+        "version" : "5.6.0"
       }
     }
   ],

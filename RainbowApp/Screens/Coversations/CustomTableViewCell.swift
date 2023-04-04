@@ -9,6 +9,9 @@ import UIKit
 import Rainbow
 class CustomTableViewCell: UITableViewCell {
     
+    
+    @IBOutlet weak var unreadMessagesView: UIView!
+    @IBOutlet weak var unreadMessagesLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -16,6 +19,7 @@ class CustomTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         ImageHelper().configureImageView(imageIcon)
+        unreadMessagesView.layer.cornerRadius = unreadMessagesView.frame.size.width/2
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -27,8 +31,8 @@ class CustomTableViewCell: UITableViewCell {
             if let conversation = conversation {
                 nameLabel.text = conversation.peer?.displayName
                 messageLabel.text = conversation.lastMessage?.body
-                let firstDate = formate(conversation.lastMessage?.date ?? Date())
-                let seconedDate = formate(Date())
+                let firstDate = DateFormatterr().formate(conversation.lastMessage?.date ?? Date())
+                let seconedDate = DateFormatterr().formate(Date())
                 if firstDate.compare(seconedDate) == .orderedAscending {
                     dateLabel.text  = String(conversation.lastMessage?.date.formatted(date: .numeric, time: .shortened) ?? "")
                 }
@@ -39,16 +43,9 @@ class CustomTableViewCell: UITableViewCell {
                 if let contact = conversation.peer as? Contact {
                     imageIcon.image = ImageHelper().getImage(contact.photoData,contact.firstName ,contact.lastName)
                 }
+                unreadMessagesLabel.text = String(conversation.unreadMessagesCount)
+                unreadMessagesView.isHidden = conversation.unreadMessagesCount == 0
             }
         }
     }
-    func formate(_ date:Date)->Date{
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
-        
-        let stringDate = formatter.string(from: date)
-        let formattedDate = formatter.date(from:stringDate)
-        return formattedDate ?? Date()
-    }
-    
 }

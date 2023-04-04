@@ -9,10 +9,10 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-
-class ChatViewController: MessagesViewController, MessagesLayoutDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate {
-    var messages = [Message]()
+class ChatViewController: MessagesViewController,MessagesLayoutDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate {
+    var messages = [ChatMessage]()
     var isFirstTime = true
+    var isSynced = false
     public  var conversation:Conversation? = nil{
         didSet {
         }
@@ -28,7 +28,10 @@ class ChatViewController: MessagesViewController, MessagesLayoutDelegate,Message
         super.viewDidLoad()
         messageBrowser = ServicesManager.sharedInstance().conversationsManagerService.messagesBrowser(for: conversation, withPageSize: 20, preloadMessages: true)
         messageBrowser?.delegate = self
-        loadNewMessages(conversation!)
+        if let conversation = conversation {
+            title = conversation.peer?.displayName
+            loadNewMessages(conversation)
+        }
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -84,19 +87,19 @@ class ChatViewController: MessagesViewController, MessagesLayoutDelegate,Message
     }
     func itemsBrowser(_ browser: CKItemsBrowser!, didAddCacheItems newItems: [Any]!, at indexes: IndexSet!) {
         DispatchQueue.main.async{ [self] in
-            let messages  =  newItems!
-            for newItemsMessage in messages {
-                if let message = newItemsMessage as? Rainbow.Message {
-                    if message.isOutgoing {
-                        self.messages.append(Message(sender: currentSender, messageId: (message.messageID)!, sentDate: (message.date)!, kind: .text(message.body!),data: ServicesManager.sharedInstance().myUser.contact?.photoData ,firstName: ServicesManager.sharedInstance().myUser.contact?.firstName ?? "" ,LastName: ServicesManager.sharedInstance().myUser.contact?.lastName ?? ""))
-                    }
-                    else{
-                        self.messages.append(Message(sender: Sender(senderId:message.peer.rainbowID, displayName: message.peer.displayName), messageId: (message.messageID)!, sentDate: (message.date)!, kind: .text(message.body!),data: (message.peer as? Contact)?.photoData ,firstName: (message.peer as?Contact)?.firstName ?? "" , LastName: (message.peer as?Contact)?.lastName ?? ""))
+            if let messages  =  newItems! as? [Rainbow.Message] {
+                for newItemsMessage in messages {
+                    if let message = newItemsMessage as? Rainbow.Message {
+                        if let index = self.messages.firstIndex(where: { $0.sentDate > message.date }) {
+                            self.messages.insert(getMessage(message), at: index)
+                        }
+                        else{
+                            self.messages.append(getMessage(message))
+                        }
                     }
                 }
+                self.reloadMessagesView()
             }
-            self.messages =  self.messages.sorted(by: {$0.sentDate < $1.sentDate})
-            self.loadFirstMessages()
         }
     }
     
@@ -104,24 +107,74 @@ class ChatViewController: MessagesViewController, MessagesLayoutDelegate,Message
     }
     
     func itemsBrowser(_ browser: CKItemsBrowser!, didUpdateCacheItems changedItems: [Any]!, at indexes: IndexSet!) {
+        DispatchQueue.main.async{ [self] in
+            if let updatedMessages = changedItems as? [Rainbow.Message] {
+                for message in updatedMessages{
+                    let index =  self.messages.firstIndex(where: {$0.messageId == message.messageID})
+                    self.messages[index!] =  getMessage(message)
+                    self.messagesCollectionView.reloadData()
+                    self.messagesCollectionView.scrollToLastItem()
+                }
+            }
+        }
     }
-    
-    
     func itemsBrowser(_ browser: CKItemsBrowser!, didReorderCacheItemsAtIndexes oldIndexes: [Any]!, toIndexes newIndexes: [Any]!) {
     }
     
     func loadNewMessages  (_ conversation:Conversation){
-        if conversation.lastMessage?.date == Date(){
-            messageBrowser?.resyncBrowsingCache(completionHandler: nil)
-            loadNewMessages(conversation)
-        }
-        else{
-            messageBrowser?.nextPage(completionHandler: nil)
+        if !isSynced{
+            isSynced = true
+            messageBrowser?.resyncBrowsingCache(completionHandler: { _,_,_,_ in
+                self.messageBrowser?.nextPage(completionHandler: nil)
+                ServicesManager.sharedInstance().conversationsManagerService.markAllMessagesAsRead(for: conversation)
+                conversation.automaticallySendMarkAsReadNewMessage = true
+            })
         }
     }
+    func messageBottomLabelHeight(for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        return 20    }
     
-    override func scrollViewDidEndDecelerating(_: UIScrollView) {
-        messageBrowser?.nextPage(completionHandler: nil)
+    func messageBottomLabelAttributedText(for message: MessageKit.MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        guard let displayedMessage = message as? ChatMessage
+        else { return nil }
+        var text = "  "
+        let textColor =  UIColor.black
+        let textColor2 =  UIColor.blue
+        let font = UIFont.systemFont(ofSize: 12, weight: .light)
+        let firstDate = DateFormatterr().formate(displayedMessage.sentDate)
+        let seconedDate = DateFormatterr().formate(Date())
+        var date = ""
+        if firstDate.compare(seconedDate) == .orderedAscending {
+            date = String(displayedMessage.sentDate.formatted(date: .abbreviated, time: .shortened))
+        }
+        else{
+            date = String(displayedMessage.sentDate.formatted(date: .abbreviated, time: .shortened).split(separator: "at").last!)
+        }
+        if displayedMessage.sender.senderId == ServicesManager.sharedInstance().myUser.contact?.rainbowID{
+            if displayedMessage.state == 0 {
+                text.append("sent")
+            }
+            else if displayedMessage.state == 1 {
+                text.append("delivered")
+            }
+            else if displayedMessage.state == 2 {
+                text.append("received")
+            }
+            else if displayedMessage.state == 3 {
+                text.append("seen")
+            }
+            else if displayedMessage.state == 4 {
+                text.append("Failed")
+            }
+        }
+        let attributedText = NSMutableAttributedString(string: date, attributes: [NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.font: font])
+        attributedText.append(NSMutableAttributedString(string: text, attributes: [NSAttributedString.Key.foregroundColor: textColor2, NSAttributedString.Key.font: font]))
+        return attributedText
+    }
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0 {
+            messageBrowser?.nextPage(completionHandler: nil)
+        }
     }
     
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
@@ -130,7 +183,7 @@ class ChatViewController: MessagesViewController, MessagesLayoutDelegate,Message
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageKit.MessageType {
         return messages[indexPath.section]
     }
-    func loadFirstMessages() {
+    func reloadMessagesView() {
         DispatchQueue.main.async {
             self.messagesCollectionView.reloadDataAndKeepOffset()
             if self.isFirstTime {
@@ -139,42 +192,7 @@ class ChatViewController: MessagesViewController, MessagesLayoutDelegate,Message
             }
         }
     }
-}
-
-extension ChatViewController: InputBarAccessoryViewDelegate {
-    @objc
-    func inputBar(_: InputBarAccessoryView, didPressSendButtonWith _: String) {
-        
-        let attributedText = messageInputBar.inputTextView.attributedText!
-        let range = NSRange(location: 0, length: attributedText.length)
-        attributedText.enumerateAttribute(.autocompleted, in: range, options: []) { _, range, _ in
-            let substring = attributedText.attributedSubstring(from: range)
-            let context = substring.attribute(.autocompletedContext, at: 0, effectiveRange: nil)
-            print("Autocompleted: `", substring, "` with context: ", context ?? [])
-        }
-        let components = messageInputBar.inputTextView.components
-        messageInputBar.inputTextView.text = String()
-        messageInputBar.invalidatePlugins()
-        // Send button activity animation
-        messageInputBar.sendButton.startAnimating()
-        messageInputBar.inputTextView.placeholder = "Sending..."
-        DispatchQueue.global(qos: .default).async {
-            sleep(1)
-            DispatchQueue.main.async { [weak self] in
-                self!.messageInputBar.sendButton.stopAnimating()
-                self!.messageInputBar.inputTextView.placeholder = "Aa"
-                for component in components {
-                    if let message = component as? String {
-                        ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(message, files: nil, mentions: nil, priority: .default, repliedMessage: nil, conversation: self!.conversation!)
-                    } else {
-                        //send an image for example
-                    }
-                }
-                self!.loadFirstMessages()
-            }
-        }
+    deinit{
+        conversation?.automaticallySendMarkAsReadNewMessage = false
     }
 }
-
-
-

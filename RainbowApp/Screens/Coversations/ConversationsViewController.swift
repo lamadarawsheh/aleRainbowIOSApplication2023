@@ -8,7 +8,24 @@
 import UIKit
 import Rainbow
 import MBProgressHUD
-class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
+import NotificationBannerSwift
+class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource, NotificationBannerDelegate{
+    func notificationBannerWillAppear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
+        
+    }
+    
+    func notificationBannerDidAppear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
+        
+    }
+    
+    func notificationBannerWillDisappear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
+        
+    }
+    
+    func notificationBannerDidDisappear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
+        
+    }
+    
     
     @IBOutlet weak var noConversationsLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -24,6 +41,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidAddConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidRemoveConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateConversation), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateMessagesUnreadCount), object: nil)
         let nib = UINib(nibName: "CustomTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "CustomTableViewCell")
         tableView.dataSource = self
@@ -50,7 +68,24 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
             self.tableView.reloadData()
         }
     }
-    
+    @objc func didReceieveMessage(notification: NSNotification) {
+        DispatchQueue.main.async { [self] in
+            let banner = FloatingNotificationBanner(
+                title: "New Message ! ",
+                subtitle: (conversations[0].peer?.displayName ?? " ") + " : " + (conversations[0].lastMessage?.body ?? ""),
+                style: .info
+            )
+            banner.delegate = self
+            banner.show(
+                queuePosition: .front,
+                queue: NotificationBannerQueue(maxBannersOnScreenSimultaneously: 3),
+                cornerRadius: 8,
+                shadowColor: UIColor(red: 0.431, green: 0.459, blue: 0.494, alpha: 1),
+                shadowBlurRadius: 16,
+                shadowEdgeInsets: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
+            )
+        }
+    }
     @objc func signout(sender: UIBarButtonItem) {
         ServicesManager.sharedInstance()?.loginManager.disconnect()
         let loadingNotification = MBProgressHUD.showAdded(to: view, animated: true)
@@ -65,12 +100,15 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
             self.dismiss(animated: false)
         }
     }
-    
-    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceieveMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat  = self.storyboard?.instantiateViewController(identifier: "chatView") as!   ChatViewController
         chat.conversation = conversations[indexPath.row]
