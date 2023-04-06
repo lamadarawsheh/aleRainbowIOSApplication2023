@@ -33,7 +33,13 @@ struct ChatMessage: MessageKit.MessageType {
         }
         self.messageId = message.messageID
         self.sentDate = message.date
-        self.kind = .text(message.body ?? "")
+        if let data = message.attachment?.thumbnailData {
+            let image = UIImage(data: data)
+            self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
+        }
+        else{
+            self.kind = .text(message.body ?? "")
+        }
         self.state = message.state.rawValue
     }
     
@@ -44,3 +50,9 @@ public struct Sender: SenderType {
     public var displayName: String
 }
 
+public struct Media:MediaItem{
+    public var url: URL?
+    public var image: UIImage?
+    public var placeholderImage: UIImage
+    public var size: CGSize
+}

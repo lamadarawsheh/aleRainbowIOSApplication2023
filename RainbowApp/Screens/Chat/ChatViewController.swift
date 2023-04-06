@@ -9,7 +9,7 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate {
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     
     func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
         return CGSize(width: 20, height: 30)
@@ -48,7 +48,47 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         messagesCollectionView.messagesDisplayDelegate = self
         messagesCollectionView.messageCellDelegate = self
         messageInputBar.delegate = self
+        setupInputButton()
         // Do any additional setup after loading the view.
+    }
+    func setupInputButton(){
+        let button = InputBarButtonItem()
+        button.setSize(CGSize(width: 35, height: 35), animated: false)
+        button.setImage(UIImage(systemName: "paperclip"), for: .normal)
+        button.onTouchUpInside({_ in
+            self.presentInputActionSheet()
+        })
+        messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
+        messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
+    }
+    func presentInputActionSheet(){
+        let actionSheet = UIAlertController(title: "Attach Media", message: "what would u like to attach?", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Photo", style: .default,handler:{ [self]_ in
+            presentPhotoActionSheet()
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Video", style: .default))
+        actionSheet.addAction(UIAlertAction(title: "Audio", style: .default))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet,animated: true)
+    }
+    func presentPhotoActionSheet(){
+        let actionSheet = UIAlertController(title: "Attach Photo", message: "choose photo from ", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default,handler:{ [self]_ in
+            let picker = UIImagePickerController()
+            picker.sourceType = .camera
+            picker.delegate = self
+            picker.allowsEditing = false
+            self.present(picker, animated: true)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default,handler: {_ in
+            let picker = UIImagePickerController()
+            picker.sourceType = .photoLibrary
+            picker.delegate = self
+            picker.allowsEditing = false
+            self.present(picker, animated: true)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet,animated: true)
     }
     func configureAvatarView(_ avatarView: MessageKit.AvatarView, for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) {
         let avatar = getAvatar(for: message, at: indexPath, in: messagesCollectionView)
@@ -197,5 +237,18 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     }
     deinit{
         conversation?.automaticallySendMarkAsReadNewMessage = false
+    }
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
+        let imageData = tempImage.pngData()
+        if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "image.png", andData: imageData, andURL: nil){
+            let files = [file]
+            ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage("image.png", files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation!)
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
 }
