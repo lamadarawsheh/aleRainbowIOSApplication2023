@@ -9,9 +9,19 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessagesLayoutDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate {
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate {
+    
+    func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
+        return CGSize(width: 20, height: 30)
+    }
+    
+    func typingIndicatorViewTopInset(in messagesCollectionView: MessageKit.MessagesCollectionView) -> CGFloat {
+        return 20
+    }
+    
+    
     var messages = [ChatMessage]()
-    var isFirstTime = true
+    var allowScrolling = true
     var isSynced = false
     public  var conversation:Conversation? = nil{
         didSet {
@@ -21,6 +31,7 @@ class ChatViewController: MessagesViewController,MessagesLayoutDelegate,Messages
         didSet{
         }
     }
+    
     var currentSender: SenderType {
         return Sender(senderId: ServicesManager.sharedInstance().myUser.contact?.rainbowID ?? " ", displayName: ServicesManager.sharedInstance().myUser.contact?.displayName ?? "  " )
     }
@@ -89,16 +100,14 @@ class ChatViewController: MessagesViewController,MessagesLayoutDelegate,Messages
         DispatchQueue.main.async{ [self] in
             if let messages  =  newItems! as? [Rainbow.Message] {
                 for newItemsMessage in messages {
-                    if let message = newItemsMessage as? Rainbow.Message {
-                        if let index = self.messages.firstIndex(where: { $0.sentDate > message.date }) {
-                            self.messages.insert(getMessage(message), at: index)
-                        }
-                        else{
-                            self.messages.append(getMessage(message))
-                        }
+                    if let index = self.messages.firstIndex(where: { $0.sentDate > newItemsMessage.date }) {
+                        self.messages.insert(ChatMessage(with: newItemsMessage), at: index)
+                    }
+                    else{
+                        self.messages.append(ChatMessage(with: newItemsMessage))
                     }
                 }
-                self.reloadMessagesView()
+                self.messagesCollectionView.reloadDataAndKeepOffset()
             }
         }
     }
@@ -111,8 +120,8 @@ class ChatViewController: MessagesViewController,MessagesLayoutDelegate,Messages
             if let updatedMessages = changedItems as? [Rainbow.Message] {
                 for message in updatedMessages{
                     let index =  self.messages.firstIndex(where: {$0.messageId == message.messageID})
-                    self.messages[index!] =  getMessage(message)
-                    self.messagesCollectionView.reloadData()
+                    self.messages[index!] =  ChatMessage(with: message)
+                    self.messagesCollectionView.reloadDataAndKeepOffset()
                     self.messagesCollectionView.scrollToLastItem()
                 }
             }
@@ -183,14 +192,8 @@ class ChatViewController: MessagesViewController,MessagesLayoutDelegate,Messages
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageKit.MessageType {
         return messages[indexPath.section]
     }
-    func reloadMessagesView() {
-        DispatchQueue.main.async {
-            self.messagesCollectionView.reloadDataAndKeepOffset()
-            if self.isFirstTime {
-                self.messagesCollectionView.scrollToLastItem()
-                self.isFirstTime = false
-            }
-        }
+    override func viewDidAppear(_ animated: Bool) {
+        self.messagesCollectionView.scrollToLastItem()
     }
     deinit{
         conversation?.automaticallySendMarkAsReadNewMessage = false

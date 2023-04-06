@@ -25,7 +25,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             NotificationCenter.default.post(name: NSNotification.Name(kLoginManagerDidChangeServer), object: ["serverURL" : "sandbox.openrainbow.com"])
         }
-       
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
+              // Enable or disable features based on authorization.
+          }
         return true
     }
     

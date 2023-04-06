@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -55,27 +56,27 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VKT-0s-a9q">
-                                <rect key="frame" x="355" y="70" width="30" height="30"/>
+                                <rect key="frame" x="353" y="70" width="30" height="25"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3a3-Uv-9tn">
-                                        <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="Fi1-XW-YFP"/>
-                                            <constraint firstAttribute="height" constant="30" id="WLg-d9-vj7"/>
+                                            <constraint firstAttribute="height" constant="25" id="WLg-d9-vj7"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="1" green="0.28989748392566761" blue="0.23518463425027458" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" systemColor="systemPinkColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="3a3-Uv-9tn" secondAttribute="trailing" id="5aK-IL-cf8"/>
                                     <constraint firstAttribute="bottom" secondItem="3a3-Uv-9tn" secondAttribute="bottom" id="AKJ-47-yVl"/>
                                     <constraint firstItem="3a3-Uv-9tn" firstAttribute="top" secondItem="VKT-0s-a9q" secondAttribute="top" id="Fev-9P-eUD"/>
                                     <constraint firstItem="3a3-Uv-9tn" firstAttribute="leading" secondItem="VKT-0s-a9q" secondAttribute="leading" id="Tnz-0d-rgr"/>
                                     <constraint firstAttribute="width" constant="30" id="c0l-ZJ-N8D"/>
-                                    <constraint firstAttribute="height" constant="30" id="kau-kI-YyY"/>
+                                    <constraint firstAttribute="height" constant="25" id="kau-kI-YyY"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -83,7 +84,7 @@
                             <constraint firstItem="BHu-H4-wQZ" firstAttribute="leading" secondItem="1XP-DS-Gvy" secondAttribute="trailing" constant="10" id="1Qa-bg-KDz"/>
                             <constraint firstItem="K1T-fx-xH8" firstAttribute="leading" secondItem="Bs0-Vk-6jz" secondAttribute="trailing" id="2z0-wk-stz"/>
                             <constraint firstItem="1XP-DS-Gvy" firstAttribute="leading" secondItem="8t6-8l-HJK" secondAttribute="leading" constant="8" id="4un-C8-X4x"/>
-                            <constraint firstAttribute="trailing" secondItem="VKT-0s-a9q" secondAttribute="trailing" constant="8" id="Fo8-o4-E2m"/>
+                            <constraint firstAttribute="trailing" secondItem="VKT-0s-a9q" secondAttribute="trailing" constant="10" id="Fo8-o4-E2m"/>
                             <constraint firstItem="VKT-0s-a9q" firstAttribute="top" secondItem="K1T-fx-xH8" secondAttribute="bottom" constant="20" id="YXk-9C-ifb"/>
                             <constraint firstItem="Bs0-Vk-6jz" firstAttribute="leading" secondItem="1XP-DS-Gvy" secondAttribute="trailing" constant="10" id="ae4-QL-RAF"/>
                             <constraint firstAttribute="height" constant="120" id="by0-kJ-ZNp"/>
@@ -117,5 +118,8 @@
     </objects>
     <resources>
         <image name="logo" width="198" height="198"/>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

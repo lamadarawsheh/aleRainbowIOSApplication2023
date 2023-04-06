@@ -19,7 +19,7 @@ class CustomTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         ImageHelper().configureImageView(imageIcon)
-        unreadMessagesView.layer.cornerRadius = unreadMessagesView.frame.size.width/2
+        unreadMessagesView.layer.cornerRadius = unreadMessagesView.frame.size.height/2
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

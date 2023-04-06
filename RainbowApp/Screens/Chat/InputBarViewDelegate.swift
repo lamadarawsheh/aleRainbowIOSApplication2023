@@ -27,7 +27,6 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         messageInputBar.sendButton.startAnimating()
         messageInputBar.inputTextView.placeholder = "Sending..."
         DispatchQueue.global(qos: .default).async {
-            sleep(1)
             DispatchQueue.main.async { [weak self] in
                 self!.messageInputBar.sendButton.stopAnimating()
                 self!.messageInputBar.inputTextView.placeholder = "Aa"
@@ -38,9 +37,15 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                         //send an image for example
                     }
                 }
-                self!.reloadMessagesView()
+                self!.messagesCollectionView.reloadDataAndKeepOffset()
+                self!.messagesCollectionView.scrollToLastItem()
             }
         }
+    }
+    func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
+    }
+    override func setTypingIndicatorViewHidden(_ isHidden: Bool, animated: Bool, whilePerforming updates: (() -> Void)? = nil, completion: ((Bool) -> Void)? = nil) {
+        
     }
 }
 

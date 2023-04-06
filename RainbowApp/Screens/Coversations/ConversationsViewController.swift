@@ -8,25 +8,8 @@
 import UIKit
 import Rainbow
 import MBProgressHUD
-import NotificationBannerSwift
-class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource, NotificationBannerDelegate{
-    func notificationBannerWillAppear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
-        
-    }
-    
-    func notificationBannerDidAppear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
-        
-    }
-    
-    func notificationBannerWillDisappear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
-        
-    }
-    
-    func notificationBannerDidDisappear(_ banner: NotificationBannerSwift.BaseNotificationBanner) {
-        
-    }
-    
-    
+import UserNotifications
+class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource, UNUserNotificationCenterDelegate{
     @IBOutlet weak var noConversationsLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var conversations: [Conversation] = [Conversation]() {
@@ -34,7 +17,6 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
             noConversationsLabel.isHidden = !conversations.isEmpty
         }
     }
-    
     override func viewDidLoad() {
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidEndLoadingConversations), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
@@ -68,22 +50,29 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
             self.tableView.reloadData()
         }
     }
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.sound,.banner])
+    }
     @objc func didReceieveMessage(notification: NSNotification) {
         DispatchQueue.main.async { [self] in
-            let banner = FloatingNotificationBanner(
-                title: "New Message ! ",
-                subtitle: (conversations[0].peer?.displayName ?? " ") + " : " + (conversations[0].lastMessage?.body ?? ""),
-                style: .info
-            )
-            banner.delegate = self
-            banner.show(
-                queuePosition: .front,
-                queue: NotificationBannerQueue(maxBannersOnScreenSimultaneously: 3),
-                cornerRadius: 8,
-                shadowColor: UIColor(red: 0.431, green: 0.459, blue: 0.494, alpha: 1),
-                shadowBlurRadius: 16,
-                shadowEdgeInsets: UIEdgeInsets(top: 8, left: 8, bottom: 0, right: 8)
-            )
+            
+            let content = UNMutableNotificationContent()
+            content.title = conversations[0].peer?.displayName ?? ""
+            content.body =  conversations[0].lastMessage?.body ?? ""
+            content.sound = .default
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            let request = UNNotificationRequest(identifier: "messageRecieved", content: content, trigger: trigger)
+            
+            UNUserNotificationCenter.current().delegate = self
+            UNUserNotificationCenter.current().add(request) { (error) in
+                if let error = error {
+                    print("Error adding notification: \(error.localizedDescription)")
+                } else {
+                    print("Notification added successfully")
+                }
+            }
         }
     }
     @objc func signout(sender: UIBarButtonItem) {

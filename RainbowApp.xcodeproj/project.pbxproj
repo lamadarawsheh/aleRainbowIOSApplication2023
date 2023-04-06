@@ -19,7 +19,6 @@
 		75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */; };
 		75435BC429D2E82D008C94F6 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 75435BC329D2E82D008C94F6 /* MessageKit */; };
 		75A30A1229D984700080C515 /* InputBarViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A30A1129D984700080C515 /* InputBarViewDelegate.swift */; };
-		75A30A1529D9A6600080C515 /* NotificationBannerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75A30A1429D9A6600080C515 /* NotificationBannerSwift */; };
 		75A30A1729DB0DD40080C515 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A30A1629DB0DD40080C515 /* DateFormatter.swift */; };
 		75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6229C31B6400279E92 /* AppDelegate.swift */; };
 		75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6429C31B6400279E92 /* SceneDelegate.swift */; };
@@ -31,7 +30,7 @@
 		75B47D7B29C31D3E00279E92 /* Rainbow in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D7A29C31D3E00279E92 /* Rainbow */; };
 		75B47D7E29C31D7400279E92 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D7D29C31D7400279E92 /* WebRTC */; };
 		75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D8029C31DAF00279E92 /* CryptoSwift */; };
-		75FC0AF929D583DB002F080F /* MessageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FC0AF829D583DB002F080F /* MessageHandler.swift */; };
+		75FC0AF929D583DB002F080F /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FC0AF829D583DB002F080F /* ChatMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +53,7 @@
 		75B47D6B29C31B6400279E92 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75B47D6E29C31B6400279E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75B47D7029C31B6400279E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		75FC0AF829D583DB002F080F /* MessageHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageHandler.swift; sourceTree = "<group>"; };
+		75FC0AF829D583DB002F080F /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,7 +61,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75A30A1529D9A6600080C515 /* NotificationBannerSwift in Frameworks */,
 				75B47D7829C31CEB00279E92 /* Alamofire in Frameworks */,
 				75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */,
 				7523E15A29C8ABD200AF1ADB /* MBProgressHUD in Frameworks */,
@@ -154,13 +152,13 @@
 				75B47D6229C31B6400279E92 /* AppDelegate.swift */,
 				75B47D6429C31B6400279E92 /* SceneDelegate.swift */,
 				75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */,
-				75FC0AF829D583DB002F080F /* MessageHandler.swift */,
+				75FC0AF829D583DB002F080F /* ChatMessage.swift */,
+				75A30A1629DB0DD40080C515 /* DateFormatter.swift */,
 				75B47D6829C31B6400279E92 /* Main.storyboard */,
 				7505BB5529CC829200210D0B /* CustomTableViewCell.xib */,
 				75B47D6D29C31B6400279E92 /* LaunchScreen.storyboard */,
 				75B47D6B29C31B6400279E92 /* Assets.xcassets */,
 				75B47D7029C31B6400279E92 /* Info.plist */,
-				75A30A1629DB0DD40080C515 /* DateFormatter.swift */,
 			);
 			path = RainbowApp;
 			sourceTree = "<group>";
@@ -188,7 +186,6 @@
 				75B47D8029C31DAF00279E92 /* CryptoSwift */,
 				7523E15929C8ABD200AF1ADB /* MBProgressHUD */,
 				75435BC329D2E82D008C94F6 /* MessageKit */,
-				75A30A1429D9A6600080C515 /* NotificationBannerSwift */,
 			);
 			productName = RainbowApp;
 			productReference = 75B47D5F29C31B6400279E92 /* RainbowApp.app */;
@@ -264,7 +261,7 @@
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
 				7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */,
 				7505BB5629CC829200210D0B /* CustomTableViewCell.swift in Sources */,
-				75FC0AF929D583DB002F080F /* MessageHandler.swift in Sources */,
+				75FC0AF929D583DB002F080F /* ChatMessage.swift in Sources */,
 				75435BBA29D0682C008C94F6 /* InfoViewController.swift in Sources */,
 				75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */,
 				753EA14929D2EA16009C54AF /* ChatViewController.swift in Sources */,
@@ -564,11 +561,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 75435BC229D2E82D008C94F6 /* XCRemoteSwiftPackageReference "MessageKit" */;
 			productName = MessageKit;
-		};
-		75A30A1429D9A6600080C515 /* NotificationBannerSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 75A30A1329D9A6600080C515 /* XCRemoteSwiftPackageReference "NotificationBanner" */;
-			productName = NotificationBannerSwift;
 		};
 		75B47D7729C31CEB00279E92 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
