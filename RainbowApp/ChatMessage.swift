@@ -26,14 +26,14 @@ struct ChatMessage: MessageKit.MessageType {
             self.LastName = ServicesManager.sharedInstance().myUser.contact?.lastName ?? ""
         }
         else {
-            self.sender = Sender(senderId:message.peer.rainbowID, displayName: message.peer.displayName)
+            self.sender = Sender(senderId:message.peer.rainbowID, displayName: message.peer.displayName ?? "" )
             self.data = (message.peer as? Contact)?.photoData
             self.firstName = (message.peer as?Contact)?.firstName ?? ""
             self.LastName = (message.peer as?Contact)?.lastName ?? ""
         }
         self.messageId = message.messageID
         self.sentDate = message.date
-        if let data = message.attachment?.thumbnailData {
+        if let data = message.attachment?.thumbnailData ?? message.attachment?.data {
             let image = UIImage(data: data)
             self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
         }

@@ -8,7 +8,7 @@
 import UIKit
 import Rainbow
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDelegate {
     
     let appId:String = "10a83170c3f711edab9089d10662fe49"
     let appSecret:String = "YpJSxDbUGf4PxCkt5DognoJjzRO0ecNzYfNVOd44FelEr7ZNmm6q3B2ndSxXVfBZ"
@@ -25,10 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         {
             NotificationCenter.default.post(name: NSNotification.Name(kLoginManagerDidChangeServer), object: ["serverURL" : "sandbox.openrainbow.com"])
         }
+        UNUserNotificationCenter.current().delegate = self
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
-              // Enable or disable features based on authorization.
-          }
+            // Enable or disable features based on authorization.
+        }
         return true
     }
     
@@ -43,7 +44,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to select a configuration to create the new scene with.
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.sound,.banner])
+    }
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.

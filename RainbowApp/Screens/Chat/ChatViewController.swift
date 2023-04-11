@@ -9,8 +9,7 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
-    
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate {
     func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
         return CGSize(width: 20, height: 30)
     }
@@ -18,8 +17,6 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     func typingIndicatorViewTopInset(in messagesCollectionView: MessageKit.MessagesCollectionView) -> CGFloat {
         return 20
     }
-    
-    
     var messages = [ChatMessage]()
     var allowScrolling = true
     var isSynced = false
@@ -37,11 +34,14 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(didRecieveComposingMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveComposingMessage), object: nil)
+        
         messageBrowser = ServicesManager.sharedInstance().conversationsManagerService.messagesBrowser(for: conversation, withPageSize: 20, preloadMessages: true)
         messageBrowser?.delegate = self
         if let conversation = conversation {
             title = conversation.peer?.displayName
             loadNewMessages(conversation)
+            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
         }
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -50,6 +50,12 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         messageInputBar.delegate = self
         setupInputButton()
         // Do any additional setup after loading the view.
+    }
+    
+    @objc func didRecieveComposingMessage(notification: NSNotification) {
+        DispatchQueue.main.async{
+            self.setTypingIndicatorViewHidden(false, animated: true)
+        }
     }
     func setupInputButton(){
         let button = InputBarButtonItem()
@@ -235,20 +241,9 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     override func viewDidAppear(_ animated: Bool) {
         self.messagesCollectionView.scrollToLastItem()
     }
-    deinit{
+    override func viewDidDisappear(_ animated: Bool) {
         conversation?.automaticallySendMarkAsReadNewMessage = false
-    }
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        let imageData = tempImage.pngData()
-        if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "image.png", andData: imageData, andURL: nil){
-            let files = [file]
-            ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage("image.png", files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation!)
-        }
-        self.dismiss(animated: true, completion: nil)
+        ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
     }
     
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        dismiss(animated: true, completion: nil)
-    }
 }

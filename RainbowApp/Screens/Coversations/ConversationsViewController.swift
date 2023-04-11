@@ -9,7 +9,7 @@ import UIKit
 import Rainbow
 import MBProgressHUD
 import UserNotifications
-class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource, UNUserNotificationCenterDelegate{
+class ConversationsViewController: UIViewController ,UITableViewDelegate,UITableViewDataSource{
     @IBOutlet weak var noConversationsLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     var conversations: [Conversation] = [Conversation]() {
@@ -50,27 +50,22 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
             self.tableView.reloadData()
         }
     }
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.sound,.banner])
-    }
+    
     @objc func didReceieveMessage(notification: NSNotification) {
         DispatchQueue.main.async { [self] in
-            
-            let content = UNMutableNotificationContent()
-            content.title = conversations[0].peer?.displayName ?? ""
-            content.body =  conversations[0].lastMessage?.body ?? ""
-            content.sound = .default
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-            let request = UNNotificationRequest(identifier: "messageRecieved", content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().delegate = self
-            UNUserNotificationCenter.current().add(request) { (error) in
-                if let error = error {
-                    print("Error adding notification: \(error.localizedDescription)")
-                } else {
-                    print("Notification added successfully")
+            if self.view.window != nil || conversations[0].status != .active{
+                let content = UNMutableNotificationContent()
+                content.title = conversations[0].peer?.displayName ?? ""
+                content.body =  conversations[0].lastMessage?.body ?? ""
+                content.sound = .default
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                let request = UNNotificationRequest(identifier: "messageRecieved", content: content, trigger: trigger)
+                UNUserNotificationCenter.current().add(request) { (error) in
+                    if let error = error {
+                        print("Error adding notification: \(error.localizedDescription)")
+                    } else {
+                        print("Notification added successfully")
+                    }
                 }
             }
         }
@@ -91,9 +86,6 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     }
     deinit {
         NotificationCenter.default.removeObserver(self)
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
     }
     override func viewDidAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(didReceieveMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
