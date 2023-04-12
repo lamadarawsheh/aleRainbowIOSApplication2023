@@ -10,7 +10,7 @@ import Foundation
 import InputBarAccessoryView
 import Rainbow
 import MessageKit
-extension ChatViewController :MessagesDisplayDelegate{
+extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
     
     func configureAvatarView(_ avatarView: MessageKit.AvatarView, for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) {
         let avatar = getAvatar(for: message, at: indexPath, in: messagesCollectionView)
@@ -56,7 +56,21 @@ extension ChatViewController :MessagesDisplayDelegate{
     }
     
     func didTapImage(in cell: MessageKit.MessageCollectionViewCell) {
-        
+        guard let indexPath = messagesCollectionView.indexPath(for: cell) else{
+            return
+        }
+        let message = messages[indexPath.section]
+        switch message.kind{
+        case .photo(let media):
+            if let image = media.image{
+                let photoViewController  = self.storyboard?.instantiateViewController(identifier: "PhotoViewer") as!   PhotoViewerViewControler
+                photoViewController.view.backgroundColor = .white
+                photoViewController.imageIcon.image = image
+                self.navigationController?.pushViewController(photoViewController, animated: true)
+            }
+        default :
+            break
+        }
     }
     
     

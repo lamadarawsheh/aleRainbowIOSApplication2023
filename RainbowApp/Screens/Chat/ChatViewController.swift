@@ -9,7 +9,7 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesLayoutDelegate {
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate {
     func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
         return CGSize(width: 20, height: 30)
     }
@@ -57,7 +57,7 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         DispatchQueue.main.async{ [self] in
             if let message = notification.object as? Rainbow.Message{
                 if message.peer.rainbowID == conversation?.peer?.rainbowID{
-                    self.setTypingIndicatorViewHidden(!isTypingIndicatorHidden, animated: true)
+                    self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
                     self.messagesCollectionView.scrollToLastItem()
                 }
             }
@@ -168,9 +168,6 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageKit.MessageType {
         return messages[indexPath.section]
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        self.messagesCollectionView.scrollToLastItem()
     }
     override func viewDidDisappear(_ animated: Bool) {
         conversation?.automaticallySendMarkAsReadNewMessage = false

@@ -545,6 +545,30 @@
             </objects>
             <point key="canvasLocation" x="4987.0229007633588" y="571.83098591549299"/>
         </scene>
+        <!--Photo Viewer View Controler-->
+        <scene sceneID="uP4-wu-eSI">
+            <objects>
+                <viewController storyboardIdentifier="PhotoViewer" id="5aH-rl-6B3" customClass="PhotoViewerViewControler" customModule="RainbowApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="LwK-qg-2MK">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cHO-S6-qyt">
+                                <rect key="frame" x="0.0" y="176" width="393" height="500"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="quJ-0A-Y7j"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageIcon" destination="cHO-S6-qyt" id="ALb-pK-0tT"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L2r-yb-NVi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5658.7786259541981" y="-75.352112676056336"/>
+        </scene>
     </scenes>
     <resources>
         <image name="envelope" catalog="system" width="128" height="93"/>
