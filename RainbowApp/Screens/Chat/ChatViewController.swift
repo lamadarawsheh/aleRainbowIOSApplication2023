@@ -9,7 +9,7 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesDisplayDelegate, MessagesLayoutDelegate {
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessageCellDelegate, MessagesLayoutDelegate {
     func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
         return CGSize(width: 20, height: 30)
     }
@@ -42,6 +42,7 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
             title = conversation.peer?.displayName
             loadNewMessages(conversation)
             ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
+            self.messagesCollectionView.scrollToLastItem()
         }
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
@@ -53,8 +54,13 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     }
     
     @objc func didRecieveComposingMessage(notification: NSNotification) {
-        DispatchQueue.main.async{
-            self.setTypingIndicatorViewHidden(false, animated: true)
+        DispatchQueue.main.async{ [self] in
+            if let message = notification.object as? Rainbow.Message{
+                if message.peer.rainbowID == conversation?.peer?.rainbowID{
+                    self.setTypingIndicatorViewHidden(!isTypingIndicatorHidden, animated: true)
+                    self.messagesCollectionView.scrollToLastItem()
+                }
+            }
         }
     }
     func setupInputButton(){
@@ -66,81 +72,6 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         })
         messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
         messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
-    }
-    func presentInputActionSheet(){
-        let actionSheet = UIAlertController(title: "Attach Media", message: "what would u like to attach?", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Photo", style: .default,handler:{ [self]_ in
-            presentPhotoActionSheet()
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Video", style: .default))
-        actionSheet.addAction(UIAlertAction(title: "Audio", style: .default))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(actionSheet,animated: true)
-    }
-    func presentPhotoActionSheet(){
-        let actionSheet = UIAlertController(title: "Attach Photo", message: "choose photo from ", preferredStyle: .actionSheet)
-        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default,handler:{ [self]_ in
-            let picker = UIImagePickerController()
-            picker.sourceType = .camera
-            picker.delegate = self
-            picker.allowsEditing = false
-            self.present(picker, animated: true)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default,handler: {_ in
-            let picker = UIImagePickerController()
-            picker.sourceType = .photoLibrary
-            picker.delegate = self
-            picker.allowsEditing = false
-            self.present(picker, animated: true)
-        }))
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        present(actionSheet,animated: true)
-    }
-    func configureAvatarView(_ avatarView: MessageKit.AvatarView, for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) {
-        let avatar = getAvatar(for: message, at: indexPath, in: messagesCollectionView)
-        avatarView.set(avatar: avatar)
-        avatarView.backgroundColor = .clear
-    }
-    
-    func getAvatar(for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> Avatar {
-        let retrievedMessage = messages.first(where: {$0.messageId == message.messageId})
-        return Avatar(image: ImageHelper().getImage(retrievedMessage?.data, retrievedMessage?.firstName, retrievedMessage?.LastName), initials: "JD")
-    }
-    func didTapBackground(in cell: MessageKit.MessageCollectionViewCell) {
-        view.endEditing(true)
-        print("tap")
-    }
-    
-    func didTapMessage(in cell: MessageKit.MessageCollectionViewCell) {
-        print("tapmessage")
-    }
-    
-    func didTapAvatar(in cell: MessageKit.MessageCollectionViewCell) {
-        print("avatar")
-    }
-    
-    func didTapCellTopLabel(in cell: MessageKit.MessageCollectionViewCell) {
-        print("tapcelltop")
-    }
-    
-    func didTapCellBottomLabel(in cell: MessageKit.MessageCollectionViewCell) {
-        print("tapcellbottom")
-    }
-    
-    func didTapMessageTopLabel(in cell: MessageKit.MessageCollectionViewCell) {
-        
-    }
-    
-    func didTapMessageBottomLabel(in cell: MessageKit.MessageCollectionViewCell) {
-        
-    }
-    
-    func didTapAccessoryView(in cell: MessageKit.MessageCollectionViewCell) {
-        
-    }
-    
-    func didTapImage(in cell: MessageKit.MessageCollectionViewCell) {
-        
     }
     func itemsBrowser(_ browser: CKItemsBrowser!, didAddCacheItems newItems: [Any]!, at indexes: IndexSet!) {
         DispatchQueue.main.async{ [self] in

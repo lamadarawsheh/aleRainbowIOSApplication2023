@@ -24,6 +24,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidRemoveConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateConversation), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(didFinishLoading(notification:)), name: NSNotification.Name(kConversationsManagerDidUpdateMessagesUnreadCount), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didReceieveMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
         let nib = UINib(nibName: "CustomTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "CustomTableViewCell")
         tableView.dataSource = self
@@ -52,19 +53,30 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     }
     
     @objc func didReceieveMessage(notification: NSNotification) {
-        DispatchQueue.main.async { [self] in
-            if self.view.window != nil || conversations[0].status != .active{
-                let content = UNMutableNotificationContent()
-                content.title = conversations[0].peer?.displayName ?? ""
-                content.body =  conversations[0].lastMessage?.body ?? ""
-                content.sound = .default
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                let request = UNNotificationRequest(identifier: "messageRecieved", content: content, trigger: trigger)
-                UNUserNotificationCenter.current().add(request) { (error) in
-                    if let error = error {
-                        print("Error adding notification: \(error.localizedDescription)")
-                    } else {
-                        print("Notification added successfully")
+        DispatchQueue.main.async {
+            if let objectValue = notification.object as? NSDictionary  {
+                if let conversation = objectValue["conversation"] as? Conversation{
+                    
+                    if let message = objectValue["message"] as? Message{
+                        
+                        
+                        if  conversation.status == .inactive{
+                            if message.body != nil {
+                                let content = UNMutableNotificationContent()
+                                content.title = message.peer?.displayName ?? ""
+                                content.body =  message.body ?? ""
+                                content.sound = .default
+                                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                                let request = UNNotificationRequest(identifier: "messageRecieved", content: content, trigger: trigger)
+                                UNUserNotificationCenter.current().add(request) { (error) in
+                                    if let error = error {
+                                        print("Error adding notification: \(error.localizedDescription)")
+                                    } else {
+                                        print("Notification added successfully")
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -87,9 +99,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
-    override func viewDidAppear(_ animated: Bool) {
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceieveMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveNewMessageForConversation), object: nil)
-    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat  = self.storyboard?.instantiateViewController(identifier: "chatView") as!   ChatViewController
         chat.conversation = conversations[indexPath.row]
