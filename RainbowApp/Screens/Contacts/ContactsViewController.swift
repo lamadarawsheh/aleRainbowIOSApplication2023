@@ -57,7 +57,8 @@ class ContactsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func setContacts (){
-        self.contacts = filter(contacts: (ServicesManager.sharedInstance()?.contactsManagerService.myNetworkContacts)!)
+        guard let contacts = ServicesManager.sharedInstance()?.contactsManagerService.myNetworkContacts else {return}
+        self.contacts = filter(contacts: contacts)
         self.contacts = contacts.sorted(by: {$0.displayName.lowercased() < $1.displayName.lowercased()})
     }
     

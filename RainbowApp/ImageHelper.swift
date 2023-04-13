@@ -16,9 +16,12 @@ class ImageHelper {
         imageIcon.clipsToBounds = true
     }
     func blurEffect(_ imageIcon:UIImageView) {
+        guard let image = imageIcon.image else{
+            return
+        }
         let context = CIContext(options: nil)
         let currentFilter = CIFilter(name: "CIGaussianBlur")
-        let beginImage = CIImage(image: imageIcon.image!)
+        let beginImage = CIImage(image: image)
         currentFilter!.setValue(beginImage, forKey: kCIInputImageKey)
         currentFilter!.setValue(10, forKey: kCIInputRadiusKey)
         let cropFilter = CIFilter(name: "CICrop")

@@ -8,14 +8,8 @@
 import UIKit
 
 class PhotoViewerViewControler: UIViewController {
-   
-    
     @IBOutlet weak var imageIcon: UIImageView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-       
     }
-    
-
 }

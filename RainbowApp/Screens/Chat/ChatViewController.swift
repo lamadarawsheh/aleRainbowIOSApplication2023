@@ -75,7 +75,7 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     }
     func itemsBrowser(_ browser: CKItemsBrowser!, didAddCacheItems newItems: [Any]!, at indexes: IndexSet!) {
         DispatchQueue.main.async{ [self] in
-            if let messages  =  newItems! as? [Rainbow.Message] {
+            if let messages  =  newItems as? [Rainbow.Message] {
                 for newItemsMessage in messages {
                     if let index = self.messages.firstIndex(where: { $0.sentDate > newItemsMessage.date }) {
                         self.messages.insert(ChatMessage(with: newItemsMessage), at: index)
@@ -96,10 +96,11 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         DispatchQueue.main.async{ [self] in
             if let updatedMessages = changedItems as? [Rainbow.Message] {
                 for message in updatedMessages{
-                    let index =  self.messages.firstIndex(where: {$0.messageId == message.messageID})
-                    self.messages[index!] =  ChatMessage(with: message)
-                    self.messagesCollectionView.reloadDataAndKeepOffset()
-                    self.messagesCollectionView.scrollToLastItem()
+                    if let index =  self.messages.firstIndex(where: {$0.messageId == message.messageID}){
+                        self.messages[index] =  ChatMessage(with: message)
+                        self.messagesCollectionView.reloadDataAndKeepOffset()
+                        self.messagesCollectionView.scrollToLastItem()
+                    }
                 }
             }
         }
@@ -168,6 +169,11 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     
     func messageForItem(at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> MessageKit.MessageType {
         return messages[indexPath.section]
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        if allowScrolling{
+            self.messagesCollectionView.scrollToLastItem()
+        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         conversation?.automaticallySendMarkAsReadNewMessage = false

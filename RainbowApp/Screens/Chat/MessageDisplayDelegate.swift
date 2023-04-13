@@ -66,6 +66,7 @@ extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
                 let photoViewController  = self.storyboard?.instantiateViewController(identifier: "PhotoViewer") as!   PhotoViewerViewControler
                 photoViewController.view.backgroundColor = .white
                 photoViewController.imageIcon.image = image
+                allowScrolling = false
                 self.navigationController?.pushViewController(photoViewController, animated: true)
             }
         default :

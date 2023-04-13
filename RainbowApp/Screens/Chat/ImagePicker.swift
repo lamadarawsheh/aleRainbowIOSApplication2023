@@ -13,7 +13,6 @@ extension ChatViewController: UIImagePickerControllerDelegate & UINavigationCont
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let tempImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        let imageData = tempImage.pngData()
         let buttonStackView = InputStackView()
         buttonStackView.axis = .horizontal
         buttonStackView.distribution = .equalCentering

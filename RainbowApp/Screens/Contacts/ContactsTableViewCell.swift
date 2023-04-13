@@ -20,7 +20,9 @@ class ContactsTableViewCell: UITableViewCell {
     }
     
     @IBAction func infoButtonTapped(_ sender: Any) {
-        delegate?.viewContactInfo(contact!)
+        if let contact = contact{
+            delegate?.viewContactInfo(contact)
+        }
     }
     
     

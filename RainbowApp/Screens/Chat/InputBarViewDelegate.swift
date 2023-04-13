@@ -12,7 +12,12 @@ import MessageKit
 extension ChatViewController: InputBarAccessoryViewDelegate {
     @objc
     func inputBar(_: InputBarAccessoryView, didPressSendButtonWith _: String) {
-        let attributedText = messageInputBar.inputTextView.attributedText!
+        guard let attributedText = messageInputBar.inputTextView.attributedText else {
+            return
+        }
+        guard let conversation = self.conversation else{
+            return
+        }
         let range = NSRange(location: 0, length: attributedText.length)
         attributedText.enumerateAttribute(.autocompleted, in: range, options: []) { _, range, _ in
             let substring = attributedText.attributedSubstring(from: range)
@@ -27,7 +32,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         
         if let message = messageInputBar.inputTextView.text {
             if !message.isEmpty{
-                ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(message, files: nil, mentions: nil, priority: .default, repliedMessage: nil, conversation: self.conversation!)
+                ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(message, files: nil, mentions: nil, priority: .default, repliedMessage: nil, conversation:conversation)
             }
             if !messageInputBar.topStackView.arrangedSubviews.isEmpty{
                 for arrangedSubview in self.messageInputBar.topStackView.arrangedSubviews {
@@ -37,7 +42,7 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
                     let imageData =   imageView?.image?.pngData()
                     if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "image.png", andData: imageData, andURL: nil){
                         let files = [file]
-                        ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(nil, files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation!)
+                        ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(nil, files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation)
                     }
                 }
                 for arrangedSubview in self.messageInputBar.topStackView.arrangedSubviews {
