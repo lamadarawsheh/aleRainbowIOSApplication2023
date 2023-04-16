@@ -13,7 +13,16 @@ extension ChatViewController {
         actionSheet.addAction(UIAlertAction(title: "Photo", style: .default,handler:{ [self]_ in
             presentPhotoActionSheet()
         }))
-        actionSheet.addAction(UIAlertAction(title: "Video", style: .default))
+        actionSheet.addAction(UIAlertAction(title: "Video", style: .default ,handler: {
+            _ in
+                let picker = UIImagePickerController()
+                picker.sourceType = .photoLibrary
+                picker.delegate = self
+                picker.allowsEditing = false
+                picker.mediaTypes = ["public.movie"]
+                self.present(picker, animated: true)
+        }))
+        
         actionSheet.addAction(UIAlertAction(title: "Audio", style: .default))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(actionSheet,animated: true)

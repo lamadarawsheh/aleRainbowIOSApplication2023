@@ -37,14 +37,23 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
             if !messageInputBar.topStackView.arrangedSubviews.isEmpty{
                 for arrangedSubview in self.messageInputBar.topStackView.arrangedSubviews {
                     let subView =  arrangedSubview as? InputStackView
-                    let imageView = subView?.arrangedSubviews.first as? InputBarButtonItem
-                    
-                    let imageData =   imageView?.image?.pngData()
-                    if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "image.png", andData: imageData, andURL: nil){
-                        let files = [file]
-                        ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(nil, files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation)
+                    if selectedURLs.isEmpty{
+                        let imageView = subView?.arrangedSubviews.first as? InputBarButtonItem
+                        let imageData =   imageView?.image?.pngData()
+                        if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "image.png", andData: imageData, andURL: nil){
+                            let files = [file]
+                            ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(nil, files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation)
+                        }
+                    }
+                    else{
+                        let url = selectedURLs.first
+                        if  let file =  ServicesManager.sharedInstance().fileSharingService.createTemporaryFile(withFileName: "video.mov", andData: nil, andURL: url){
+                            let files = [file]
+                            ServicesManager.sharedInstance().conversationsManagerService.sendTextMessage(nil, files: files, mentions: nil, priority: .default, repliedMessage: nil, conversation: conversation)
+                        }
                     }
                 }
+                selectedURLs.removeAll()
                 for arrangedSubview in self.messageInputBar.topStackView.arrangedSubviews {
                     self.messageInputBar.topStackView.removeArrangedSubview(arrangedSubview)
                     arrangedSubview.removeFromSuperview()

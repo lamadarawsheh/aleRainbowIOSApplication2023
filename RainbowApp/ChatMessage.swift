@@ -34,13 +34,22 @@ struct ChatMessage: MessageKit.MessageType {
         self.messageId = message.messageID
         self.sentDate = message.date
         if (message.attachment != nil) {
-            print("nbbnbnbnbnbnbnbn")
+            
             if let data = message.attachment?.thumbnailData ?? message.attachment?.data {
                 let image = UIImage(data: data)
+                
                 self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
             }
             else{
-                self.kind = .photo(Media(image:UIImage(systemName: "plus"),placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
+                
+                if !ChatViewController().selectedURLs.isEmpty || (message.attachment?.url) != nil{
+                    print(ChatViewController().selectedURLs.first)
+                    print(message.attachment?.url)
+                    self.kind = .video(Media(url:ChatViewController().selectedURLs.first ?? message.attachment?.url , placeholderImage: UIImage(systemName: "play")!, size: CGSize(width: 200, height: 200)))
+                }
+                else{
+                    self.kind = .photo(Media(image:UIImage(systemName: "plus"),placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
+                }
             }
         }
         else{

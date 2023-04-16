@@ -10,16 +10,10 @@ import UIKit
 import MessageKit
 
 class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate {
-    func typingIndicatorViewSize(for layout: MessageKit.MessagesCollectionViewFlowLayout) -> CGSize {
-        return CGSize(width: 20, height: 30)
-    }
-    
-    func typingIndicatorViewTopInset(in messagesCollectionView: MessageKit.MessagesCollectionView) -> CGFloat {
-        return 20
-    }
     var messages = [ChatMessage]()
     var allowScrolling = true
     var isSynced = false
+    var selectedURLs:[URL] = []
     public  var conversation:Conversation? = nil{
         didSet {
         }
@@ -41,7 +35,7 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         if let conversation = conversation {
             title = conversation.peer?.displayName
             loadNewMessages(conversation)
-            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
+//            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
             self.messagesCollectionView.scrollToLastItem()
         }
         messagesCollectionView.messagesDataSource = self
@@ -58,7 +52,9 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
             if let message = notification.object as? Rainbow.Message{
                 if message.peer.rainbowID == conversation?.peer?.rainbowID{
                     self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
-                    self.messagesCollectionView.scrollToLastItem()
+                    if allowScrolling{
+                        self.messagesCollectionView.scrollToLastItem()
+                    }
                 }
             }
         }

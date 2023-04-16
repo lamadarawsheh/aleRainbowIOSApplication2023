@@ -10,6 +10,7 @@ import Foundation
 import InputBarAccessoryView
 import Rainbow
 import MessageKit
+import AVKit
 extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
     
     func configureAvatarView(_ avatarView: MessageKit.AvatarView, for message: MessageKit.MessageType, at indexPath: IndexPath, in messagesCollectionView: MessageKit.MessagesCollectionView) {
@@ -67,7 +68,18 @@ extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
                 photoViewController.view.backgroundColor = .white
                 photoViewController.imageIcon.image = image
                 allowScrolling = false
-                self.navigationController?.pushViewController(photoViewController, animated: true)
+//                self.navigationController?.pushViewController(photoViewController, animated: true)
+                self.present(photoViewController, animated: true)
+            }
+        case .video(let media):
+            if let url = media.url{
+                let player = AVPlayer(url: url)
+        
+                let playerViewController = AVPlayerViewController()
+                       playerViewController.player = player
+                present(playerViewController, animated: true) {
+                    player.play()
+                }
             }
         default :
             break
