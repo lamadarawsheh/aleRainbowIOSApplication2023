@@ -33,31 +33,35 @@ struct ChatMessage: MessageKit.MessageType {
         }
         self.messageId = message.messageID
         self.sentDate = message.date
-        if (message.attachment != nil) {
-            
+        self.state = message.state.rawValue
+        if message.attachment?.type == .image {
             if let data = message.attachment?.thumbnailData ?? message.attachment?.data {
                 let image = UIImage(data: data)
                 
-                self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
+                self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "photo")!, size: CGSize(width: 200, height: 200)))
             }
             else{
-                
-                if !ChatViewController().selectedURLs.isEmpty || (message.attachment?.url) != nil{
-                    print(ChatViewController().selectedURLs.first)
-                    print(message.attachment?.url)
-                    self.kind = .video(Media(url:ChatViewController().selectedURLs.first ?? message.attachment?.url , placeholderImage: UIImage(systemName: "play")!, size: CGSize(width: 200, height: 200)))
-                }
-                else{
-                    self.kind = .photo(Media(image:UIImage(systemName: "plus"),placeholderImage: UIImage(systemName: "plus")!, size: CGSize(width: 200, height: 200)))
-                }
+                self.kind = .photo(Media(image:UIImage(systemName: "photo")!,placeholderImage: UIImage(systemName: "photo")!, size: CGSize(width: 200, height: 200)))                }
+        }
+        else if message.attachment?.type == .video{
+            if let cacheUrl = message.attachment?.cacheUrl {
+                self.kind = .video(Media(url: cacheUrl, placeholderImage: UIImage(systemName: "play.fill")!, size: CGSize(width: 200, height: 200)))
+            }
+            else {
+                let file = message.attachment
+                var url = file?.url
+                ServicesManager.sharedInstance().fileSharingService.downloadData(for: file, withCompletionHandler: {_,_  in
+                    DispatchQueue.main.async {
+                        url = file?.url
+                    }
+                })
+                self.kind = .video(Media(url: url,placeholderImage: UIImage(systemName: "play.fill")!, size: CGSize(width: 200, height: 200)))
             }
         }
         else{
             self.kind = .text(message.body ?? "")
         }
-        self.state = message.state.rawValue
     }
-    
 }
 
 public struct Sender: SenderType {

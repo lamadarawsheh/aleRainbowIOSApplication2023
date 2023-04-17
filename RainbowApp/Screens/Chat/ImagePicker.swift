@@ -12,11 +12,7 @@ import InputBarAccessoryView
 extension ChatViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String {
-                    if mediaType == "public.image" {
-                        if let tempImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-                           addToTopStackView(tempImage,nil)
-                        }
-                    } else if mediaType == "public.movie" {
+                   if mediaType == "public.movie" {
                         if let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
                             addToTopStackView(UIImage(systemName: "play")!,url)
                         }

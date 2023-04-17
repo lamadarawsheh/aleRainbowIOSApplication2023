@@ -66,12 +66,9 @@ extension ChatViewController: InputBarAccessoryViewDelegate {
         messageInputBar.invalidatePlugins()
         self.messagesCollectionView.reloadDataAndKeepOffset()
         self.messagesCollectionView.scrollToLastItem()
-        
     }
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
-        print(isTypingIndicatorHidden)
-        if text.isEmpty
-        {
+        if text.isEmpty{
             ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
         }
         else{

@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import PhotosUI
 extension ChatViewController {
     func presentInputActionSheet(){
         let actionSheet = UIAlertController(title: "Attach Media", message: "what would u like to attach?", preferredStyle: .actionSheet)
@@ -37,10 +38,12 @@ extension ChatViewController {
             self.present(picker, animated: true)
         }))
         actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default,handler: {_ in
-            let picker = UIImagePickerController()
-            picker.sourceType = .photoLibrary
+            var configuration = PHPickerConfiguration()
+            configuration.filter = .images
+            configuration.selectionLimit = 5
+            
+            let picker = PHPickerViewController(configuration: configuration)
             picker.delegate = self
-            picker.allowsEditing = false
             self.present(picker, animated: true)
         }))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))

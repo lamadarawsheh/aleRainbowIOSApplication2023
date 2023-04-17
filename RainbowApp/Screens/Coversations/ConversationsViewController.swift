@@ -116,4 +116,10 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         cell.conversation = conversations[indexPath.row]
         return cell
     }
+    override func viewDidAppear(_ animated: Bool) {
+        for conversation in conversations {
+            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
+        }
+   
+    }
 }

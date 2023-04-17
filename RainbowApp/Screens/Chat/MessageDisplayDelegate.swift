@@ -68,15 +68,14 @@ extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
                 photoViewController.view.backgroundColor = .white
                 photoViewController.imageIcon.image = image
                 allowScrolling = false
-//                self.navigationController?.pushViewController(photoViewController, animated: true)
                 self.present(photoViewController, animated: true)
             }
         case .video(let media):
             if let url = media.url{
                 let player = AVPlayer(url: url)
-        
                 let playerViewController = AVPlayerViewController()
-                       playerViewController.player = player
+                playerViewController.player = player
+                allowScrolling = false
                 present(playerViewController, animated: true) {
                     player.play()
                 }

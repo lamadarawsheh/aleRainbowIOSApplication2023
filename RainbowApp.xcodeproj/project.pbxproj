@@ -22,6 +22,7 @@
 		75435BBA29D0682C008C94F6 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BB929D0682C008C94F6 /* InfoViewController.swift */; };
 		75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */; };
 		75435BC429D2E82D008C94F6 /* MessageKit in Frameworks */ = {isa = PBXBuildFile; productRef = 75435BC329D2E82D008C94F6 /* MessageKit */; };
+		755CA8F529ED582800862887 /* PHPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 755CA8F429ED582800862887 /* PHPickerViewController.swift */; };
 		75A30A1229D984700080C515 /* InputBarViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A30A1129D984700080C515 /* InputBarViewDelegate.swift */; };
 		75A30A1729DB0DD40080C515 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75A30A1629DB0DD40080C515 /* DateFormatter.swift */; };
 		75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B47D6229C31B6400279E92 /* AppDelegate.swift */; };
@@ -51,6 +52,7 @@
 		75435BB529D039BB008C94F6 /* ContactsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactsTableViewCell.xib; sourceTree = "<group>"; };
 		75435BB929D0682C008C94F6 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		75435BBB29D1AAE1008C94F6 /* ImageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHelper.swift; sourceTree = "<group>"; };
+		755CA8F429ED582800862887 /* PHPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerViewController.swift; sourceTree = "<group>"; };
 		75A30A1129D984700080C515 /* InputBarViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputBarViewDelegate.swift; sourceTree = "<group>"; };
 		75A30A1629DB0DD40080C515 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
 		75B47D5F29C31B6400279E92 /* RainbowApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RainbowApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 				751A015E29E6C8F5008353D0 /* MessageDisplayDelegate.swift */,
 				751A016029E6C9DD008353D0 /* PresentingActionsheets.swift */,
 				751A016429E6D502008353D0 /* PhotoViewerViewControler.swift */,
+				755CA8F429ED582800862887 /* PHPickerViewController.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 			children = (
 				75B47D6129C31B6400279E92 /* RainbowApp */,
 				75B47D6029C31B6400279E92 /* Products */,
+				75B81CA929ED48DC00A4217D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -173,6 +177,13 @@
 				75B47D7029C31B6400279E92 /* Info.plist */,
 			);
 			path = RainbowApp;
+			sourceTree = "<group>";
+		};
+		75B81CA929ED48DC00A4217D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -273,6 +284,7 @@
 				751A015D29E42C9F008353D0 /* ImagePicker.swift in Sources */,
 				75B47D6329C31B6400279E92 /* AppDelegate.swift in Sources */,
 				75A30A1729DB0DD40080C515 /* DateFormatter.swift in Sources */,
+				755CA8F529ED582800862887 /* PHPickerViewController.swift in Sources */,
 				75B47D6529C31B6400279E92 /* SceneDelegate.swift in Sources */,
 				751A016529E6D502008353D0 /* PhotoViewerViewControler.swift in Sources */,
 				7517EAD229C86292008D6AD9 /* ConversationsViewController.swift in Sources */,

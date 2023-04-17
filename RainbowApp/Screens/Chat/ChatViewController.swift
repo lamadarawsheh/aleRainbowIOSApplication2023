@@ -49,11 +49,15 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     
     @objc func didRecieveComposingMessage(notification: NSNotification) {
         DispatchQueue.main.async{ [self] in
-            if let message = notification.object as? Rainbow.Message{
-                if message.peer.rainbowID == conversation?.peer?.rainbowID{
-                    self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
-                    if allowScrolling{
-                        self.messagesCollectionView.scrollToLastItem()
+           print(type(of: notification.object))
+                if let message = notification.object as? Rainbow.Message{
+                    if message.peer.rainbowID == conversation?.peer?.rainbowID{
+                        if conversation?.status == .active{
+                            print("jhjhjhjhjhj")
+                            self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
+                        if allowScrolling{
+                            self.messagesCollectionView.scrollToLastItem()
+                        }
                     }
                 }
             }
@@ -167,11 +171,13 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         return messages[indexPath.section]
     }
     override func viewDidAppear(_ animated: Bool) {
+        ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
         if allowScrolling{
             self.messagesCollectionView.scrollToLastItem()
         }
     }
     override func viewDidDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
         conversation?.automaticallySendMarkAsReadNewMessage = false
         ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
     }
