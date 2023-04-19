@@ -12,12 +12,12 @@ import InputBarAccessoryView
 extension ChatViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String {
-                   if mediaType == "public.movie" {
-                        if let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-                            addToTopStackView(UIImage(systemName: "play")!,url)
-                        }
-                    }
+            if mediaType == "public.movie" {
+                if let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+                    addToTopStackView(UIImage(systemName: "play")!,url)
                 }
+            }
+        }
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -38,14 +38,10 @@ extension ChatViewController: UIImagePickerControllerDelegate & UINavigationCont
         CancelButton.setSize(CGSize(width: 100, height: 50), animated: false)
         CancelButton.setTitle("Cancel", for: .normal)
         CancelButton.onTouchUpInside({_ in
-            for arrangedSubview in self.messageInputBar.topStackView.arrangedSubviews {
-                self.messageInputBar.topStackView.removeArrangedSubview(arrangedSubview)
-                arrangedSubview.removeFromSuperview()
-            }
-            self.messageInputBar.topStackView.isHidden = true
-            self.messageInputBar.sendButton.isEnabled = false
+            self.messageInputBar.topStackView.removeArrangedSubview(buttonStackView)
+            buttonStackView.removeFromSuperview()
+            self.messageInputBar.sendButton.isEnabled = !self.messageInputBar.topStackView.arrangedSubviews.isEmpty
         })
-        
         buttonStackView.addArrangedSubview(imageButton)
         buttonStackView.addArrangedSubview(CancelButton)
         messageInputBar.topStackView.addArrangedSubview(buttonStackView)

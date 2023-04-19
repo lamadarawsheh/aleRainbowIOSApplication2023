@@ -17,8 +17,7 @@ struct ChatMessage: MessageKit.MessageType {
     var LastName:String
     var state:Int
     
-    init(with message:Message)
-    {
+    init(with message:Message){
         if message.isOutgoing{
             self.sender = ChatViewController().currentSender
             self.data = ServicesManager.sharedInstance().myUser.contact?.photoData
@@ -37,7 +36,6 @@ struct ChatMessage: MessageKit.MessageType {
         if message.attachment?.type == .image {
             if let data = message.attachment?.thumbnailData ?? message.attachment?.data {
                 let image = UIImage(data: data)
-                
                 self.kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "photo")!, size: CGSize(width: 200, height: 200)))
             }
             else{
@@ -45,17 +43,15 @@ struct ChatMessage: MessageKit.MessageType {
         }
         else if message.attachment?.type == .video{
             if let cacheUrl = message.attachment?.cacheUrl {
-                self.kind = .video(Media(url: cacheUrl, placeholderImage: UIImage(systemName: "play.fill")!, size: CGSize(width: 200, height: 200)))
+                self.kind = .video(Media(url: cacheUrl, placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
             }
             else {
-                let file = message.attachment
-                var url = file?.url
-                ServicesManager.sharedInstance().fileSharingService.downloadData(for: file, withCompletionHandler: {_,_  in
+                let filee = message.attachment
+                self.kind = .video(Media(url: filee?.cacheUrl, placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
+                ServicesManager.sharedInstance().fileSharingService.downloadData(for: filee, withCompletionHandler: {[self]file,_ in
                     DispatchQueue.main.async {
-                        url = file?.url
-                    }
+                        delegate?.reloadData((file?.cacheUrl)! , messageId)}
                 })
-                self.kind = .video(Media(url: url,placeholderImage: UIImage(systemName: "play.fill")!, size: CGSize(width: 200, height: 200)))
             }
         }
         else{
@@ -63,7 +59,7 @@ struct ChatMessage: MessageKit.MessageType {
         }
     }
 }
-
+var delegate :reloadDataDelegate?
 public struct Sender: SenderType {
     public var senderId: String
     public var displayName: String

@@ -9,8 +9,8 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate {
-    var messages = [ChatMessage]()
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate ,reloadDataDelegate{
+    public var messages = [ChatMessage]()
     var allowScrolling = true
     var isSynced = false
     var selectedURLs:[URL] = []
@@ -18,15 +18,13 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         didSet {
         }
     }
-    var messageBrowser:MessagesBrowser? = nil{
-        didSet{
-        }
-    }
+    public var messageBrowser:MessagesBrowser? = nil
     
     var currentSender: SenderType {
         return Sender(senderId: ServicesManager.sharedInstance().myUser.contact?.rainbowID ?? " ", displayName: ServicesManager.sharedInstance().myUser.contact?.displayName ?? "  " )
     }
     override func viewDidLoad() {
+        delegate = self
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(didRecieveComposingMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveComposingMessage), object: nil)
         
@@ -35,7 +33,6 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         if let conversation = conversation {
             title = conversation.peer?.displayName
             loadNewMessages(conversation)
-//            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.active, for: conversation)
             self.messagesCollectionView.scrollToLastItem()
         }
         messagesCollectionView.messagesDataSource = self
@@ -49,12 +46,11 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
     
     @objc func didRecieveComposingMessage(notification: NSNotification) {
         DispatchQueue.main.async{ [self] in
-           print(type(of: notification.object))
-                if let message = notification.object as? Rainbow.Message{
-                    if message.peer.rainbowID == conversation?.peer?.rainbowID{
-                        if conversation?.status == .active{
-                            print("jhjhjhjhjhj")
-                            self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
+            print(type(of: notification.object))
+            if let message = notification.object as? Rainbow.Message{
+                if message.peer.rainbowID == conversation?.peer?.rainbowID{
+                    if conversation?.status == .active{
+                        self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
                         if allowScrolling{
                             self.messagesCollectionView.scrollToLastItem()
                         }
@@ -181,5 +177,19 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         conversation?.automaticallySendMarkAsReadNewMessage = false
         ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
     }
-    
+    public  func reloadData(_ url:URL , _ messageId:String) {
+        if let index =  self.messages.firstIndex(where: {$0.messageId == messageId}){
+            self.messages[index].kind = .video(Media(url: url, placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
+            self.messagesCollectionView.reloadDataAndKeepOffset()
+        }
+    }
+    override func didMove(toParent parent: UIViewController?) {
+        if self.parent == nil{
+            conversation = nil
+            messageBrowser = nil
+        }
+    }
+}
+protocol reloadDataDelegate {
+    func reloadData(_ url:URL , _ messageId:String)
 }

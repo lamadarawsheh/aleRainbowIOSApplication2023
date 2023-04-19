@@ -17,7 +17,11 @@ extension ChatViewController: PHPickerViewControllerDelegate {
                 DispatchQueue.main.async { [self] in
                     if let image = image as? UIImage {
                         addToTopStackView(image, nil)
-                    }
+                      } else if let error = error {
+                        print("Failed to load image: \(error.localizedDescription)")
+                     } else {
+                        print("Unknown error occurred while loading image.")
+                     }
                 }
             }
         }

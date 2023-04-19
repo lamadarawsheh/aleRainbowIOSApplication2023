@@ -40,8 +40,7 @@ extension ChatViewController {
         actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default,handler: {_ in
             var configuration = PHPickerConfiguration()
             configuration.filter = .images
-            configuration.selectionLimit = 5
-            
+            configuration.selectionLimit = 100
             let picker = PHPickerViewController(configuration: configuration)
             picker.delegate = self
             self.present(picker, animated: true)

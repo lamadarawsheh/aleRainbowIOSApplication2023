@@ -56,10 +56,7 @@ class ConversationsViewController: UIViewController ,UITableViewDelegate,UITable
         DispatchQueue.main.async {
             if let objectValue = notification.object as? NSDictionary  {
                 if let conversation = objectValue["conversation"] as? Conversation{
-                    
                     if let message = objectValue["message"] as? Message{
-                        
-                        
                         if  conversation.status == .inactive{
                             if message.body != nil {
                                 let content = UNMutableNotificationContent()

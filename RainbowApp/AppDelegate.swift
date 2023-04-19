@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import Rainbow
+import Rainbow  
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDelegate {
     
