@@ -9,7 +9,7 @@ import InputBarAccessoryView
 import UIKit
 import MessageKit
 
-class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate ,reloadDataDelegate{
+class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDataSource, CKItemsBrowserDelegate, MessagesLayoutDelegate {
     public var messages = [ChatMessage]()
     var allowScrolling = true
     var isSynced = false
@@ -24,9 +24,9 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         return Sender(senderId: ServicesManager.sharedInstance().myUser.contact?.rainbowID ?? " ", displayName: ServicesManager.sharedInstance().myUser.contact?.displayName ?? "  " )
     }
     override func viewDidLoad() {
-        delegate = self
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(didRecieveComposingMessage(notification:)), name: NSNotification.Name(kConversationsManagerDidReceiveComposingMessage), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didUpdateFile(notification:)), name: NSNotification.Name(kFileSharingServiceDidUpdateFile), object: nil)
         
         messageBrowser = ServicesManager.sharedInstance().conversationsManagerService.messagesBrowser(for: conversation, withPageSize: 20, preloadMessages: true)
         messageBrowser?.delegate = self
@@ -43,7 +43,25 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         setupInputButton()
         // Do any additional setup after loading the view.
     }
-    
+    @objc func didUpdateFile(notification: NSNotification) {
+        DispatchQueue.main.async {
+            if let file = notification.object as? File{
+                if let index =  self.messages.firstIndex(where: {$0.file?.rainbowID  == file.rainbowID}){
+                    if  self.messages[index].file?.type == .video {
+                        self.messages[index].kind = .video(Media(url: file.createCacheUrl() , placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
+                        self.messagesCollectionView.reloadDataAndKeepOffset()
+                    }
+                    else if self.messages[index].file?.type == .image{
+                        if let data = file.thumbnailData ?? file.data {
+                            let image = UIImage(data: data)
+                            self.messages[index].kind = .photo(Media(image:image,placeholderImage: UIImage(systemName: "photo")!, size: CGSize(width: 200, height: 200)))
+                        }
+                        self.messagesCollectionView.reloadDataAndKeepOffset()
+                    }
+                }
+            }
+        }
+    }
     @objc func didRecieveComposingMessage(notification: NSNotification) {
         DispatchQueue.main.async{ [self] in
             print(type(of: notification.object))
@@ -51,9 +69,8 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
                 if message.peer.rainbowID == conversation?.peer?.rainbowID{
                     if conversation?.status == .active{
                         self.setTypingIndicatorViewHidden(!message.isComposing, animated: true)
-                        if allowScrolling{
-                            self.messagesCollectionView.scrollToLastItem()
-                        }
+                        self.messagesCollectionView.scrollToLastItem()
+                        
                     }
                 }
             }
@@ -63,9 +80,7 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         let button = InputBarButtonItem()
         button.setSize(CGSize(width: 35, height: 35), animated: false)
         button.setImage(UIImage(systemName: "paperclip"), for: .normal)
-        button.onTouchUpInside({_ in
-            self.presentInputActionSheet()
-        })
+        button.addTarget(self, action: #selector(presentInputActionSheet), for: .touchUpInside)
         messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
         messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
     }
@@ -172,24 +187,13 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
             self.messagesCollectionView.scrollToLastItem()
         }
     }
-    override func viewDidDisappear(_ animated: Bool) {
-        NotificationCenter.default.removeObserver(self)
-        conversation?.automaticallySendMarkAsReadNewMessage = false
-        ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
-    }
-    public  func reloadData(_ url:URL , _ messageId:String) {
-        if let index =  self.messages.firstIndex(where: {$0.messageId == messageId}){
-            self.messages[index].kind = .video(Media(url: url, placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
-            self.messagesCollectionView.reloadDataAndKeepOffset()
-        }
-    }
     override func didMove(toParent parent: UIViewController?) {
         if self.parent == nil{
+            NotificationCenter.default.removeObserver(self)
+            conversation?.automaticallySendMarkAsReadNewMessage = false
+            ServicesManager.sharedInstance().conversationsManagerService.setStatus(.inactive, for: conversation)
             conversation = nil
             messageBrowser = nil
         }
     }
-}
-protocol reloadDataDelegate {
-    func reloadData(_ url:URL , _ messageId:String)
 }

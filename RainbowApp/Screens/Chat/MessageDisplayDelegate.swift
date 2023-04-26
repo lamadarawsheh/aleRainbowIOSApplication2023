@@ -75,7 +75,6 @@ extension ChatViewController :MessagesDisplayDelegate,MessageCellDelegate{
                 let player = AVPlayer(url: url)
                 let playerViewController = AVPlayerViewController()
                 playerViewController.player = player
-                allowScrolling = false
                 present(playerViewController, animated: true) {
                     player.play()
                 }

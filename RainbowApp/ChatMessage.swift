@@ -16,10 +16,10 @@ struct ChatMessage: MessageKit.MessageType {
     var firstName:String
     var LastName:String
     var state:Int
-    
+    var file:File?
     init(with message:Message){
         if message.isOutgoing{
-            self.sender = ChatViewController().currentSender
+            self.sender = Sender(senderId: ServicesManager.sharedInstance().myUser.contact?.rainbowID ?? " ", displayName: ServicesManager.sharedInstance().myUser.contact?.displayName ?? "  " )
             self.data = ServicesManager.sharedInstance().myUser.contact?.photoData
             self.firstName = ServicesManager.sharedInstance().myUser.contact?.firstName ?? ""
             self.LastName = ServicesManager.sharedInstance().myUser.contact?.lastName ?? ""
@@ -47,19 +47,17 @@ struct ChatMessage: MessageKit.MessageType {
             }
             else {
                 let filee = message.attachment
-                self.kind = .video(Media(url: filee?.cacheUrl, placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
-                ServicesManager.sharedInstance().fileSharingService.downloadData(for: filee, withCompletionHandler: {[self]file,_ in
-                    DispatchQueue.main.async {
-                        delegate?.reloadData((file?.cacheUrl)! , messageId)}
-                })
+                self.kind = .video(Media(url: filee?.createCacheUrl(), placeholderImage: UIImage(systemName: "film")!, size: CGSize(width: 80, height: 80)))
+                ServicesManager.sharedInstance().fileSharingService.downloadData(for: message.attachment, withCompletionHandler: nil
+                )
             }
         }
         else{
             self.kind = .text(message.body ?? "")
         }
+        self.file = message.attachment
     }
 }
-var delegate :reloadDataDelegate?
 public struct Sender: SenderType {
     public var senderId: String
     public var displayName: String

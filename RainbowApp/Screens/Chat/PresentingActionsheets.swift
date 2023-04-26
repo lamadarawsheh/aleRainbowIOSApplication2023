@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import PhotosUI
 extension ChatViewController {
-    func presentInputActionSheet(){
+   @objc func presentInputActionSheet(){
         let actionSheet = UIAlertController(title: "Attach Media", message: "what would u like to attach?", preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: "Photo", style: .default,handler:{ [self]_ in
             presentPhotoActionSheet()
