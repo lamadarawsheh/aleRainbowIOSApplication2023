@@ -35,6 +35,8 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
             loadNewMessages(conversation)
             self.messagesCollectionView.scrollToLastItem()
         }
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(titeTapped(tapGestureRecognizer:)))
+        self.navigationController?.navigationBar.addGestureRecognizer(tapGestureRecognizer)
         messagesCollectionView.messagesDataSource = self
         messagesCollectionView.messagesLayoutDelegate = self
         messagesCollectionView.messagesDisplayDelegate = self
@@ -42,6 +44,11 @@ class ChatViewController: MessagesViewController,MessageLabelDelegate,MessagesDa
         messageInputBar.delegate = self
         setupInputButton()
         // Do any additional setup after loading the view.
+    }
+    @objc func titeTapped(tapGestureRecognizer: UITapGestureRecognizer){
+        let infoViewController  = self.storyboard?.instantiateViewController(identifier: "userInfoview") as!   InfoViewController
+        infoViewController.contact = conversation?.peer as? Contact
+        self.navigationController?.pushViewController(infoViewController, animated: true)
     }
     @objc func didUpdateFile(notification: NSNotification) {
         DispatchQueue.main.async {

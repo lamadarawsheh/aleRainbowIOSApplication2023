@@ -22,6 +22,7 @@ class ContactsViewController: UIViewController, UITableViewDataSource, UITableVi
         configureItems()
         setContacts()
         NotificationCenter.default.addObserver(self, selector: #selector(didLogout(notification:)), name: NSNotification.Name(kLoginManagerDidLogoutSucceeded), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didUpdateContacts(notification:)), name: NSNotification.Name(kContactsManagerServiceDidUpdateContact), object: nil)
         let nib = UINib(nibName: "ContactsTableViewCell", bundle: nil)
         tableView.register(nib, forCellReuseIdentifier: "ContactsTableViewCell")
         tableView.dataSource = self
@@ -55,11 +56,17 @@ class ContactsViewController: UIViewController, UITableViewDataSource, UITableVi
             self.dismiss(animated: false)
         }
     }
+    @objc func didUpdateContacts(notification: NSNotification) {
+        DispatchQueue.main.async{ [self] in
+            setContacts()
+            self.tableView.reloadData()
+        }
+    }
     
     func setContacts (){
         guard let contacts = ServicesManager.sharedInstance()?.contactsManagerService.myNetworkContacts else {return}
         self.contacts = filter(contacts: contacts)
-        self.contacts = contacts.sorted(by: {$0.displayName.lowercased() < $1.displayName.lowercased()})
+        self.contacts = contacts.sorted(by: {$0.lastName.lowercased() < $1.lastName.lowercased()})
     }
     
     func filter(contacts: [Contact]) -> [Contact] {
@@ -89,7 +96,16 @@ class ContactsViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        let chat  = self.storyboard?.instantiateViewController(identifier: "chatView") as!   ChatViewController
+        ServicesManager.sharedInstance().conversationsManagerService.startConversation(with: contacts[indexPath.row], withCompletionHandler: {_,_ in
+            DispatchQueue.main.async { [self] in
+                print("done")
+                let conversations = ServicesManager.sharedInstance().conversationsManagerService.conversations
+                chat.conversation = conversations?.first(where: {$0.peer == contacts[indexPath.row]})
+                        self.navigationController?.pushViewController(chat, animated: true)
+            }
+        })
+
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) ->Int {
