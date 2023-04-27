@@ -36,6 +36,7 @@
 		75B47D7E29C31D7400279E92 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D7D29C31D7400279E92 /* WebRTC */; };
 		75B47D8129C31DAF00279E92 /* CryptoSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 75B47D8029C31DAF00279E92 /* CryptoSwift */; };
 		75FC0AF929D583DB002F080F /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FC0AF829D583DB002F080F /* ChatMessage.swift */; };
+		75FF216F29FA670C0010A5B6 /* AudioCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FF216E29FA670C0010A5B6 /* AudioCallViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		75B47D6E29C31B6400279E92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		75B47D7029C31B6400279E92 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		75FC0AF829D583DB002F080F /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		75FF216E29FA670C0010A5B6 /* AudioCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCallViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 		7517EACD29C86213008D6AD9 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				75FF216D29FA66E40010A5B6 /* AudioCall */,
 				75435BC529D2E896008C94F6 /* Chat */,
 				75435BB829D06806008C94F6 /* Info */,
 				7517EAD029C8624B008D6AD9 /* Contacts */,
@@ -184,6 +187,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		75FF216D29FA66E40010A5B6 /* AudioCall */ = {
+			isa = PBXGroup;
+			children = (
+				75FF216E29FA670C0010A5B6 /* AudioCallViewController.swift */,
+			);
+			path = AudioCall;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,6 +305,7 @@
 				75435BBC29D1AAE1008C94F6 /* ImageHelper.swift in Sources */,
 				753EA14929D2EA16009C54AF /* ChatViewController.swift in Sources */,
 				7517EAD429C862AE008D6AD9 /* ContactsViewController.swift in Sources */,
+				75FF216F29FA670C0010A5B6 /* AudioCallViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

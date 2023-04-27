@@ -259,6 +259,9 @@
                                                 </constraints>
                                                 <state key="normal" title="Button"/>
                                                 <buttonConfiguration key="configuration" style="plain" image="phone" catalog="system"/>
+                                                <connections>
+                                                    <action selector="audioTapped:" destination="oTh-8j-WDe" eventType="touchUpInside" id="tus-Sl-C2s"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IkN-H7-6TM">
                                                 <rect key="frame" x="252" y="200" width="56" height="35"/>
@@ -405,6 +408,63 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gIG-T1-WWI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="5913.740458015267" y="571.83098591549299"/>
+        </scene>
+        <!--Audio Call View Controller-->
+        <scene sceneID="xsA-Qd-ZuD">
+            <objects>
+                <viewController storyboardIdentifier="AudiocallView" id="bhb-6v-ZjM" customClass="AudioCallViewController" customModule="RainbowApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dbT-3p-vND">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="Zis-rm-ZDo">
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo5" translatesAutoresizingMaskIntoConstraints="NO" id="AXX-Pr-SVI">
+                                <rect key="frame" x="76" y="306" width="240" height="240"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="TdA-aI-Qsw"/>
+                                    <constraint firstAttribute="height" constant="240" id="pjn-wD-0ym"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0v4-rb-hdD">
+                                <rect key="frame" x="158" y="742" width="77" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="Y8F-Gz-odO"/>
+                                    <constraint firstAttribute="width" constant="77" id="aPZ-Oi-uKD"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
+                                <connections>
+                                    <action selector="hangUpButtonTapped:" destination="bhb-6v-ZjM" eventType="touchUpInside" id="Ulw-K9-EsN"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Nz4-2S-STB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="0v4-rb-hdD" firstAttribute="top" secondItem="AXX-Pr-SVI" secondAttribute="bottom" constant="196" id="04q-Q2-M2k"/>
+                            <constraint firstAttribute="bottom" secondItem="Zis-rm-ZDo" secondAttribute="bottom" id="Aof-Lg-pG9"/>
+                            <constraint firstItem="AXX-Pr-SVI" firstAttribute="top" secondItem="Nz4-2S-STB" secondAttribute="top" constant="247" id="D6Q-OK-D4C"/>
+                            <constraint firstItem="0v4-rb-hdD" firstAttribute="top" secondItem="AXX-Pr-SVI" secondAttribute="bottom" constant="196" id="HDo-8H-xuH"/>
+                            <constraint firstItem="Nz4-2S-STB" firstAttribute="trailing" secondItem="AXX-Pr-SVI" secondAttribute="trailing" constant="77" id="Jxr-Fk-YF7"/>
+                            <constraint firstItem="Zis-rm-ZDo" firstAttribute="top" secondItem="dbT-3p-vND" secondAttribute="top" id="Nhh-ha-kf8"/>
+                            <constraint firstItem="Zis-rm-ZDo" firstAttribute="leading" secondItem="Nz4-2S-STB" secondAttribute="leading" id="PQ6-h1-QxC"/>
+                            <constraint firstItem="AXX-Pr-SVI" firstAttribute="leading" secondItem="Nz4-2S-STB" secondAttribute="leading" constant="76" id="Rhm-0K-dT2"/>
+                            <constraint firstItem="0v4-rb-hdD" firstAttribute="leading" secondItem="Nz4-2S-STB" secondAttribute="leading" constant="158" id="V2M-bb-8mQ"/>
+                            <constraint firstItem="Nz4-2S-STB" firstAttribute="trailing" secondItem="0v4-rb-hdD" secondAttribute="trailing" constant="158" id="VA4-uk-H6b"/>
+                            <constraint firstItem="Zis-rm-ZDo" firstAttribute="trailing" secondItem="Nz4-2S-STB" secondAttribute="trailing" id="rHQ-A7-e8C"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="bigIcon" destination="Zis-rm-ZDo" id="aSq-4o-eTn"/>
+                        <outlet property="hangUpButton" destination="0v4-rb-hdD" id="qTQ-4e-AYd"/>
+                        <outlet property="smallIcon" destination="AXX-Pr-SVI" id="gOp-OE-B1I"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MY3-XJ-bJT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6672.5190839694651" y="571.12676056338034"/>
         </scene>
         <!--Conversations-->
         <scene sceneID="O04-10-tzZ">
@@ -573,6 +633,7 @@
     <resources>
         <image name="envelope" catalog="system" width="128" height="93"/>
         <image name="logo" width="198" height="198"/>
+        <image name="logo5" width="256" height="256"/>
         <image name="person.2" catalog="system" width="128" height="82"/>
         <image name="phone" catalog="system" width="128" height="115"/>
         <image name="text.bubble.rtl" catalog="system" width="128" height="110"/>

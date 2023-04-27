@@ -30,6 +30,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         center.requestAuthorization(options: [.alert, .sound]) { (granted, error) in
             // Enable or disable features based on authorization.
         }
+        AVAudioSession.sharedInstance().requestRecordPermission { (granted) in
+            if granted {
+                // Microphone access granted
+            } else {
+                // Microphone access denied
+            }
+        }
+        ServicesManager.sharedInstance().rtcService.startCallKit(withIncomingSoundName: "bell", iconTemplate: "kkk")
+    
         return true
     }
     
